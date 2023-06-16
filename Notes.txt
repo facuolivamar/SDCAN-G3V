@@ -1,0 +1,6 @@
+Instalar driver para USB
+Instalar zip library > SFE_BMP180-master.zip
+1. Resistencias
+2. Version de la libreria, Version: BPM085 1.0.0
+examples >  adafruit BPM085 library > test
+examples > WireScan
