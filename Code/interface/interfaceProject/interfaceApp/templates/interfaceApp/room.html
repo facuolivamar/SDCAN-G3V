@@ -26,6 +26,7 @@
 
         // Define an empty array for storing data points
         let chartData = [];
+        let chartLabel = [];
 
         const lineChart = document.getElementById('lineChart');
 
@@ -33,7 +34,7 @@
         const chart = new Chart(lineChart, {
             type: 'line',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                labels: chartLabel,
                 datasets: [{
                     label: 'My First Dataset',
                     data: chartData,
@@ -47,6 +48,7 @@
         function updateLineChart() {
             // Update the chart's dataset with the latest data array
             chart.data.datasets[0].data = chartData;
+            chart.data.chartLabel = chartLabel;
         
             // Update the chart
             chart.update();
@@ -56,23 +58,20 @@
             const data = JSON.parse(e.data);
         
             // Update the chart data array with the new value
-            chartData.push(data.message);
+            chartData.push(data.value);
+            chartLabel.push(data.index);
         
             // Limit the chart data array to a maximum number of data points (e.g., 10)
             const maxDataPoints = 10;
             if (chartData.length > maxDataPoints) {
                 chartData.shift();  // Remove the oldest data point
+                chartLabel.shift();  // Remove the oldest data point
             }
         
             // Update the line chart with the updated data
             updateLineChart();
         };
         
-
-        {% comment %} chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
-        }; {% endcomment %}
 
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
