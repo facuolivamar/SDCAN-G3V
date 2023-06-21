@@ -3,13 +3,16 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Chat Room</title>
+    <title>Dashboard</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
+
+    <div>
+        <canvas id="lineChart"></canvas>
+    </div>      
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
@@ -21,10 +24,55 @@
             + '/'
         );
 
+        // Define an empty array for storing data points
+        let chartData = [];
+
+        const lineChart = document.getElementById('lineChart');
+
+        // Create the chart and store the instance in a variable
+        const chart = new Chart(lineChart, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: chartData,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                }],
+            },
+        });
+
+        function updateLineChart() {
+            // Update the chart's dataset with the latest data array
+            chart.data.datasets[0].data = chartData;
+        
+            // Update the chart
+            chart.update();
+        }
+        
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+        
+            // Update the chart data array with the new value
+            chartData.push(data.message);
+        
+            // Limit the chart data array to a maximum number of data points (e.g., 10)
+            const maxDataPoints = 10;
+            if (chartData.length > maxDataPoints) {
+                chartData.shift();  // Remove the oldest data point
+            }
+        
+            // Update the line chart with the updated data
+            updateLineChart();
         };
+        
+
+        {% comment %} chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        }; {% endcomment %}
 
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
@@ -45,6 +93,8 @@
             }));
             messageInputDom.value = '';
         };
+
     </script>
+
 </body>
 </html>
