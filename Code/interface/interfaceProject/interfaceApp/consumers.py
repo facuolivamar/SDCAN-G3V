@@ -16,6 +16,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        # Send initial data once the connection is established
+        await self.send_initial_data()
+
         # Start the periodic task to send updates
         asyncio.create_task(self.send_updates())
 
@@ -23,23 +26,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+    async def send_initial_data(self):
+        # Generate some data or retrieve it from a source
+        import sys
+        sys.path.insert(0, '../Code/interface/interfaceProject')
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "message": message}
-        )
+        dataFile = "machine-readable-business-employment-data-mar-2023-quarter.csv"
+        data = pd.read_csv(dataFile)
 
-    async def chat_message(self, event):
-        message = event["message"]
+        cont = 0
+        while cont < 10:
+            value = float(data["Data_value"][cont])
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message}))
+            # Send the data to the WebSocket
+            await self.send(text_data=json.dumps({"value": value, "index": cont}))
+
+            cont += 1
+
+            # Wait for a few seconds before sending the next update
+            await asyncio.sleep(1)
 
     async def send_updates(self):
-        cont = 0
+        cont = 10
         while True:
             # Generate some data or retrieve it from a source
             import sys
