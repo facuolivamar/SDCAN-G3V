@@ -21,8 +21,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        # Send initial data once the connection is established
-        await self.send_initial_data()
+        # # Send initial data once the connection is established
+        # await self.send_initial_data()
 
         # Start the periodic task to send updates
         asyncio.create_task(self.csv_data_storage())
@@ -31,32 +31,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def send_initial_data(self):
-        try:
-            # Generate some data or retrieve it from a source
-            import sys
-            sys.path.insert(0, '../Code/interface/interfaceProject')
+    # async def send_initial_data(self):
+    #     try:
+    #         # Generate some data or retrieve it from a source
+    #         import sys
+    #         sys.path.insert(0, '../Code/interface/interfaceProject')
 
-            csvFile = 'data-receiver.csv'
-            data = pd.read_csv(csvFile)
+    #         csvFile = 'data-receiver.csv'
+    #         data = pd.read_csv(csvFile)
             
-            for index in data["datetime"].index:
-                await self.send(text_data=json.dumps({
-                    "datetime": str(data["datetime"][index]),
-                    "temperature": str(data["temperature"][index]),
-                    "pressure": str(data["pressure"][index]),
-                    "altitude": str(data["altitude"][index]),
-                    "rssi": str(data["rssi"][index]),
-                    }))
+    #         for index in data["datetime"].index:
+    #             await self.send(text_data=json.dumps({
+    #                 "datetime": str(data["datetime"][index]),
+    #                 "temperature": str(data["temperature"][index]),
+    #                 "pressure": str(data["pressure"][index]),
+    #                 "altitude": str(data["altitude"][index]),
+    #                 "rssi": str(data["rssi"][index]),
+    #                 }))
 
-                await asyncio.sleep(1)
-        except Exception as e:
-            print(f"error: {e}")
+    #             await asyncio.sleep(1)
+    #     except Exception as e:
+    #         print(f"error: {e}")
 
     async def csv_data_storage(self):
-        # Open a connection to the serial port
-        pass
-        
+        # Open a connection to the serial port 
+               
         ser = serial.Serial('COM3', 115200, timeout=1)
 
         import sys
@@ -111,9 +110,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "rssi": str(rssi),
                     }))
 
-                await asyncio.sleep(1.2)
+                await asyncio.sleep(3)
 
             except Exception as e:
                 print(f'Error occurred: {e}')
 
-                await asyncio.sleep(1.2)
+                await asyncio.sleep(3)

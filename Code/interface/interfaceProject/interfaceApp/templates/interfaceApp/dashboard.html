@@ -110,10 +110,10 @@
         );
 
         
-        chatSocket.onopen = function(e) {
+        {% comment %} chatSocket.onopen = function(e) {
             // Connection is established, send initial data if needed
             chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
-        };
+        }; {% endcomment %}
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
