@@ -1,0 +1,202 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+
+{% extends "interfaceApp/base.html" %}
+    <meta charset="utf-8"/>
+{% block title %} <title>Dashboard</title> {% endblock title %}
+
+{% block navbar-title %} G3V-SDCAN {% endblock navbar-title %}
+
+{% block sidebar-title %} Measurements {% endblock sidebar-title %}
+
+{% block sidebar-items %}
+    <div class="sidebar-item">Temperature</div>
+    <div class="sidebar-item">Pressure</div>
+    <div class="sidebar-item">Altitude</div>
+    <div class="sidebar-item">RSSI</div>
+{% endblock sidebar-items %}
+
+{% block section %}
+
+        <section class="section">
+        
+          <div class="container">
+            
+            <div class="row">
+              <div class="col-md-12">
+                <h2 class="section-heading">Table</h2>
+                    <div class="table-container">
+                        <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                            <th>Datetime</th>
+                            <th>Temperature</th>
+                            <th>Pressure</th>
+                            <th>Altitude</th>
+                            <th>RSSI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                        </table>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <h2 class="section-heading">Chart 4</h2>
+                    <div>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        const tableBody = document.getElementById('table-body');
+        const maxRows = 10;
+
+        // Define empty arrays for storing data points
+        let chartTemperatureData = [];
+        let chartPressureData = [];
+        let chartAltitudeData = [];
+        let chartRssiData = [];
+        let chartLabel = [];
+
+        const lineChart = document.getElementById('lineChart');
+
+        // Create the chart and store the instance in a variable
+        const chart = new Chart(lineChart, {
+            type: 'line',
+            data: {
+                labels: chartLabel,
+                datasets: [
+                    {
+                        label: 'Temperature',
+                        data: chartTemperatureData,
+                        fill: false,
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1,
+                    },
+                    {
+                        label: 'Pressure',
+                        data: chartPressureData,
+                        fill: false,
+                        borderColor: 'rgb(54, 162, 235)',
+                        tension: 0.1,
+                    },
+                    {
+                        label: 'Altitude',
+                        data: chartAltitudeData,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                    },
+                    {
+                        label: 'RSSI',
+                        data: chartRssiData,
+                        fill: false,
+                        borderColor: 'rgb(255, 205, 86)',
+                        tension: 0.1,
+                    },
+                ],
+            },
+        });
+
+        function updateLineChart() {
+            // Update the chart's datasets with the latest data arrays
+            chart.data.datasets[0].data = chartTemperatureData;
+            chart.data.datasets[1].data = chartPressureData;
+            chart.data.datasets[2].data = chartAltitudeData;
+            chart.data.datasets[3].data = chartRssiData;
+            chart.data.chartLabel = chartLabel;
+        
+            // Update the chart
+            chart.update();
+        }
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/room/'
+        );
+
+        
+        chatSocket.onopen = function(e) {
+            // Connection is established, send initial data if needed
+            chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
+        };
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+        
+            // Create a new row for the table
+            const row = document.createElement('tr');
+            const datetimeCell = document.createElement('td');
+            const temperatureCell = document.createElement('td');
+            const pressureCell = document.createElement('td');
+            const altitudeCell = document.createElement('td');
+            const rssiCell = document.createElement('td');
+
+            // Set the cell values from the received data
+            datetimeCell.textContent = data.datetime;
+            temperatureCell.textContent = data.temperature;
+            pressureCell.textContent = data.pressure;
+            altitudeCell.textContent = data.altitude;
+            rssiCell.textContent = data.rssi;
+
+            // Insert the cells into the row
+            row.appendChild(datetimeCell);
+            row.appendChild(temperatureCell);
+            row.appendChild(pressureCell);
+            row.appendChild(altitudeCell);
+            row.appendChild(rssiCell);
+
+            // Insert the row at the beginning of the table body
+            tableBody.prepend(row);
+
+            // Remove extra rows if the table exceeds the maximum number of rows
+            if (tableBody.children.length > maxRows) {
+                tableBody.lastElementChild.remove();
+            }
+
+            // Update the chart data arrays with the new values
+            chartTemperatureData.push(data.temperature);
+            chartPressureData.push(data.pressure);
+            chartAltitudeData.push(data.altitude);
+            chartRssiData.push(data.rssi);
+            chartLabel.push(data.datetime);
+        
+            // Limit the chart data arrays to a maximum number of data points (e.g., 10)
+            const maxDataPoints = 10;
+            if (chartTemperatureData.length > maxDataPoints) {
+                chartTemperatureData.shift();  // Remove the oldest data point
+                chartPressureData.shift();  // Remove the oldest data point
+                chartAltitudeData.shift();  // Remove the oldest data point
+                chartRssiData.shift();  // Remove the oldest data point
+                chartLabel.shift();  // Remove the oldest data point
+            }
+        
+            // Update the line chart with the updated data
+            updateLineChart();
+        };
+        
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+    </script>
+
+{% endblock section %}
+
+
+</html>

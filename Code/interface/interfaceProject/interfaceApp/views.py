@@ -6,4 +6,4 @@ from django.shortcuts import render
 # from .models import CSVData
 
 def index(request):
-    return render(request, "interfaceApp/room.html")
+    return render(request, "interfaceApp/dashboard.html")
