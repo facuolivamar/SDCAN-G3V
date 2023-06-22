@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Template</title>
+  {% block title %} <title>Dashboard Base</title> {% endblock title %}
   <!-- Add your CSS framework stylesheet link here -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Add your chart library stylesheet link here -->
@@ -113,6 +113,10 @@
                 <div class="chart-container">
                   <div id="chart2"></div>
                 </div>
+              </div>
+              <div class="col-md-6">
+                <h2 class="section-heading">Chart 2</h2>
+                {% block newChart %}{% endblock newChart %}
               </div>
             </div>
           </div>
