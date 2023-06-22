@@ -76,7 +76,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def csv_data_storage(self):
         # Open a connection to the serial port
-        ser = serial.Serial('COM11', 115200, timeout=1)
+        ser = serial.Serial('COM3', 115200, timeout=1)
 
         import sys
         sys.path.insert(0, '../Code/interface/interfaceProject')
@@ -120,10 +120,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 print(df)
 
-                df.to_csv('Code/interface/interfaceProject/data-receiver.csv', index=False)
+                df.to_csv('data-receiver.csv', index=False)
                 
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(1.2)
 
             except Exception as e:
                 print(f'Error occurred: {e}')
 
+                await asyncio.sleep(1.2)
