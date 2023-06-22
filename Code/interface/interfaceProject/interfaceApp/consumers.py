@@ -1,6 +1,11 @@
 # consumers.py
 import json
 import asyncio
+import serial
+import pandas as pd
+import re
+import time
+
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -21,6 +26,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Start the periodic task to send updates
         asyncio.create_task(self.send_updates())
+
+        asyncio.create_task(self.csv_data_storage())
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -66,3 +73,57 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             # Wait for a few seconds before sending the next update
             await asyncio.sleep(5)
+
+    async def csv_data_storage(self):
+        # Open a connection to the serial port
+        ser = serial.Serial('COM11', 115200, timeout=1)
+
+        import sys
+        sys.path.insert(0, '../Code/interface/interfaceProject')
+        
+        csvFile = 'data-receiver.csv'
+
+        while True:
+            try:
+                # Read data from the serial port
+                if not ser.isOpen():
+                    ser.open()
+
+                data = ser.read(1000).decode('utf-8')
+
+                # print(f"Received data: {data}")
+
+                temperaturePattern = re.compile(r"Temperature = (\d\d.\d\d)")
+                temperature = temperaturePattern.search(data).group(1)
+
+                pressurePattern = re.compile(r"Pressure = (\d\d\d\d\d)")
+                pressure = pressurePattern.search(data).group(1)
+
+                altitudePattern = re.compile(r"Altitude = (\d\d\d.\d\d)")
+                altitude = altitudePattern.search(data).group(1)
+
+                rssiPattern = re.compile(r"RSSI (-\d\d)")
+                rssi = rssiPattern.search(data).group(1)
+
+                # print(f"Packet: {packet}")
+                print(f"Temperature: {temperature}")
+                print(f"Pressure: {pressure}")
+                print(f"Altitude: {altitude}")
+                print(f"RSSI: {rssi}")
+                
+                # Close the serial port connection
+                ser.close()
+
+                df = pd.read_csv(csvFile)
+
+                df.loc[len(df)] = [time.ctime(time.time()),temperature, pressure, altitude, rssi]
+
+                print(df)
+
+                df.to_csv('Code/interface/interfaceProject/data-receiver.csv', index=False)
+                
+                await asyncio.sleep(0.5)
+
+            except Exception as e:
+                print(f'Error occurred: {e}')
+
