@@ -18,36 +18,60 @@
   {% block chart-1 %}
   <h2 class="section-heading">Table</h2>
   <div class="table-container">
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="dataTable">
       <thead>
         <tr>
-          <th>Header 1</th>
-          <th>Header 2</th>
-          <th>Header 3</th>
-          <th>Header 3</th>
-          <th>Header 3</th>
+          <th>Datetime</th>
+          <th>Temperature</th>
+          <th>Pressure</th>
+          <th>Altitude</th>
+          <th>RSSI</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-        <tr>
-          <td>Data 4</td>
-          <td>Data 5</td>
-          <td>Data 6</td>
-        </tr>
-        <tr>
-          <td>Data 4</td>
-          <td>Data 5</td>
-          <td>Data 6</td>
-        </tr>
       </tbody>
     </table>
   </div>
-  {% endblock chart-1 %}
+
+  <script>
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/room/'
+    );
+
+    chatSocket.onopen = function(e) {
+        // Connection is established, send initial data if needed
+        chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
+    };
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const tableBody = document.querySelector('#dataTable tbody');
+
+        // Create a new row and populate it with the received data
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td>${data.datetime}</td>
+          <td>${data.temperature}</td>
+          <td>${data.pressure}</td>
+          <td>${data.altitude}</td>
+          <td>${data.rssi}</td>
+        `;
+
+        // Add the new row to the table body
+        tableBody.appendChild(newRow);
+    };
+    
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+  </script>
+
+{% endblock chart-1 %}
+
+
   {% block chart-2 %}
   <h2 class="section-heading">Chart 1</h2>
   <div class="chart-container">
@@ -129,8 +153,9 @@
 
     </script>
     {% endblock chart-3 %}
-  {% block chart-4 %}{% endblock chart-4 %}
-  {% block table- %}{% endblock table- %}
+
+    {% block chart-4 %}{% endblock chart-4 %}
+    {% block table- %}{% endblock table- %}
 
 
 </html>
