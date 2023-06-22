@@ -1,6 +1,7 @@
 import serial
 import pandas as pd
 import re
+import time
 
 try:
     # Open a connection to the serial port
@@ -34,6 +35,15 @@ try:
     
     # Close the serial port connection
     ser.close()
+
+    df = pd.read_csv('Code/interface/interfaceProject/data-receiver.csv')
+
+    df.loc[len(df)] = [time.ctime(time.time()),temperature, pressure, altitude, rssi]
+
+    print(df)
+
+    df.to_csv('Code/interface/interfaceProject/data-receiver.csv', index=False)
+
 
 except Exception as e:
     print(f'Error occurred: {e}')
