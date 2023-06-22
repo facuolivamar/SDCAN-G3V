@@ -51,15 +51,15 @@
             <div class="row">
               <div class="col-md-12">
                 <h2 class="section-heading">Chart 4</h2>
-                    <div>
-                        <canvas id="lineChart"></canvas>
+                    <div id="chart-container">
+                        <div id="lineChart"></div>
                     </div>
               </div>
             </div>
           </div>
         </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
     <script>
 
         const tableBody = document.getElementById('table-body');
@@ -75,53 +75,32 @@
         const lineChart = document.getElementById('lineChart');
 
         // Create the chart and store the instance in a variable
-        const chart = new Chart(lineChart, {
-            type: 'line',
-            data: {
-                labels: chartLabel,
-                datasets: [
-                    {
-                        label: 'Temperature',
-                        data: chartTemperatureData,
-                        fill: false,
-                        borderColor: 'rgb(255, 99, 132)',
-                        tension: 0.1,
-                    },
-                    {
-                        label: 'Pressure',
-                        data: chartPressureData,
-                        fill: false,
-                        borderColor: 'rgb(54, 162, 235)',
-                        tension: 0.1,
-                    },
-                    {
-                        label: 'Altitude',
-                        data: chartAltitudeData,
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1,
-                    },
-                    {
-                        label: 'RSSI',
-                        data: chartRssiData,
-                        fill: false,
-                        borderColor: 'rgb(255, 205, 86)',
-                        tension: 0.1,
-                    },
-                ],
-            },
+        const chart = new ApexCharts(lineChart, {
+            series: [
+                { name: 'Temperature', data: chartTemperatureData },
+                { name: 'Pressure', data: chartPressureData },
+                { name: 'Altitude', data: chartAltitudeData },
+                { name: 'RSSI', data: chartRssiData },
+            ],
+            chart: { type: 'line', height: 350 },
+            xaxis: { categories: chartLabel },
+            yaxis: { title: { text: 'Value' } },
+            legend: { position: 'top' },
         });
 
         function updateLineChart() {
             // Update the chart's datasets with the latest data arrays
-            chart.data.datasets[0].data = chartTemperatureData;
-            chart.data.datasets[1].data = chartPressureData;
-            chart.data.datasets[2].data = chartAltitudeData;
-            chart.data.datasets[3].data = chartRssiData;
-            chart.data.chartLabel = chartLabel;
+            chart.updateSeries([
+                { name: 'Temperature', data: chartTemperatureData },
+                { name: 'Pressure', data: chartPressureData },
+                { name: 'Altitude', data: chartAltitudeData },
+                { name: 'RSSI', data: chartRssiData },
+            ]);
         
             // Update the chart
-            chart.update();
+            chart.updateOptions({
+                xaxis: { categories: chartLabel },
+            });
         }
 
         const chatSocket = new WebSocket(
@@ -194,9 +173,11 @@
             console.error('Chat socket closed unexpectedly');
         };
 
+        // Render the chart
+        chart.render();
+
     </script>
 
 {% endblock section %}
-
 
 </html>
