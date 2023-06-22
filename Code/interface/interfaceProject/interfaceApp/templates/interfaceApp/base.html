@@ -82,7 +82,7 @@
 <body>
   <!-- Navbar -->
   <nav class="navbar">
-    <a class="navbar-brand" href="#">Dashboard</a>
+    <a class="navbar-brand" href="#"> {% block navbar-title %} Dashboard {% endblock navbar-title %}</a>
   </nav>
 
   <div class="container-fluid">
@@ -90,10 +90,12 @@
         <!-- Left sidebar section -->
         <div class="col-md-3">
             <div class="sidebar">
-            <h2 class="sidebar-heading">Sidebar</h2>
-            <div class="sidebar-item">Item 1</div>
-            <div class="sidebar-item">Item 2</div>
-            <div class="sidebar-item">Item 3</div>
+            <h2 class="sidebar-heading"> {% block sidebar-title %} Sidebar {% endblock sidebar-title %}</h2>
+            {% block sidebar-items %}
+                <div class="sidebar-item">Item 1</div>
+                <div class="sidebar-item">Item 2</div>
+                <div class="sidebar-item">Item 3</div>
+            {% endblock sidebar-items %}
             </div>
         </div>
 
@@ -103,20 +105,25 @@
           <div class="container">
             <div class="row">
               <div class="col-md-6">
+                {% block chart-1 %}
                 <h2 class="section-heading">Chart 1</h2>
                 <div class="chart-container">
                   <div id="chart1"></div>
                 </div>
+                {% endblock chart-1 %}
               </div>
               <div class="col-md-6">
+                {% block chart-2 %}
                 <h2 class="section-heading">Chart 2</h2>
                 <div class="chart-container">
                   <div id="chart2"></div>
                 </div>
+                {% endblock chart-2 %}
               </div>
               <div class="col-md-6">
-                <h2 class="section-heading">Chart 2</h2>
-                {% block newChart %}{% endblock newChart %}
+                {% block chart-3 %}
+                <h2 class="section-heading">Chart 3</h2>
+                {% endblock chart-3 %}
               </div>
             </div>
           </div>
@@ -126,12 +133,15 @@
           <div class="container">
             <div class="row">
               <div class="col-md-6">
-                <h2 class="section-heading">Chart 3</h2>
+                {% block chart-4 %}
+                <h2 class="section-heading">Chart 4</h2>
                 <div class="chart-container">
                   <div id="chart3"></div>
                 </div>
+                {% endblock chart-4 %}
               </div>
               <div class="col-md-6">
+                {% block table- %}
                 <h2 class="section-heading">Table</h2>
                 <div class="table-container">
                   <table class="table table-bordered">
@@ -156,6 +166,7 @@
                     </tbody>
                   </table>
                 </div>
+                {% endblock table- %}
               </div>
             </div>
           </div>
@@ -167,7 +178,8 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2023 Your Company. All rights reserved.</p>
+        {% comment %} . All rights reserved. {% endcomment %}
+      <p>&copy; 2023 G3V-SDCAN</p>
     </div>
   </footer>
 

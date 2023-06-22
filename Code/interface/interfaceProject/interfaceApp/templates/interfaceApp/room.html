@@ -5,8 +5,60 @@
     <meta charset="utf-8"/>
   {% block title %} <title>Dashboard</title> {% endblock title %}
 
-  {% block newChart %}
-    <div>
+  {% block navbar-title %} G3V-SDCAN {% endblock navbar-title %}
+
+  {% block sidebar-title %} Measurements {% endblock sidebar-title %}
+  {% block sidebar-items %}
+  <div class="sidebar-item">Temperature</div>
+  <div class="sidebar-item">Pressure</div>
+  <div class="sidebar-item">Altitude</div>
+  <div class="sidebar-item">RSSI</div>
+  {% endblock sidebar-items %}
+
+  {% block chart-1 %}
+  <h2 class="section-heading">Table</h2>
+  <div class="table-container">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Header 1</th>
+          <th>Header 2</th>
+          <th>Header 3</th>
+          <th>Header 3</th>
+          <th>Header 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data 1</td>
+          <td>Data 2</td>
+          <td>Data 3</td>
+        </tr>
+        <tr>
+          <td>Data 4</td>
+          <td>Data 5</td>
+          <td>Data 6</td>
+        </tr>
+        <tr>
+          <td>Data 4</td>
+          <td>Data 5</td>
+          <td>Data 6</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endblock chart-1 %}
+  {% block chart-2 %}
+  <h2 class="section-heading">Chart 1</h2>
+  <div class="chart-container">
+    <div id="chart1"></div>
+  </div>
+
+  {% endblock chart-2 %}
+
+  {% block chart-3 %}
+  <h2 class="section-heading">Chart 3</h2>
+  <div>
         <canvas id="lineChart"></canvas>
     </div>      
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -76,7 +128,9 @@
         };
 
     </script>
+    {% endblock chart-3 %}
+  {% block chart-4 %}{% endblock chart-4 %}
+  {% block table- %}{% endblock table- %}
 
-    {% endblock %}
 
 </html>
