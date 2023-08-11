@@ -27,7 +27,7 @@ Adafruit_BMP085 bmp;
 #define Type_MQ4 ("MQ-4")
 #define RatioMQ4CleanAir (4.4)
 #define Pin_MQ4 (38)
-MQUnifiedsensor MQ4(Board_MQ4, Voltage_Resolution_MQ4, ADC_Bit_Resolution_MQ4, Pin_MQ4, Type_MQ4);
+MQUnifiedsensor MQ4(Board, Voltage_Resolution, ADC_Bit_Resolution, Pin_MQ4, Type_MQ4);
 
 
 //MQ131
