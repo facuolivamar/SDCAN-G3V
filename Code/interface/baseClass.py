@@ -48,12 +48,42 @@ class dataProcessing():
         except Exception as e:
             print(f'something went wrong with MISION SECUNDARIA values: {e}')
 
+    def calcAltura(self, x0):
+        '''
+        Calcular altura respecto a valor de altitud al momento de despege(y0), y al valor de altitud en el momento actual.
+        '''
+        altura = float(self.Altitude) - float(x0)
+
+        return altura
+
+    def calcNOx(self, x):
+        NOx = x
+
+        return NOx
+
+    def calcCOVs(self, x):
+        COVs = x
+
+        return COVs
+
+    def calcO3(self, x):
+        O3 = x
+
+        return O3
+
+    def calcCO2(self, x):
+        CO2 = x
+
+        return CO2
+
 
 
 mock_data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = 37.7749, Longitude = -122.4194, Speed = 25"
 
 # Create an instance of dataProcessing with mock data
 processed_data = dataProcessing(mock_data)
+
+print(processed_data.calcAltura.__doc__)
 
 print("Temperature:", processed_data.Temperature)
 print("Pressure:", processed_data.Pressure)
