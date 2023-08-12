@@ -83,6 +83,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 df.to_csv('data-receiver.csv', index=False)
                 
                 text_data = processed_data.__dict__
+                text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude))
 
                 await self.send(text_data=json.dumps(text_data))
 
