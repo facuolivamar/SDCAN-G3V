@@ -5,8 +5,8 @@ import serial
 import pandas as pd
 import re
 import time
-from baseClass import dataProcessing
-
+from .baseClass import dataProcessing
+from .models import input
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -56,8 +56,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def csv_data_storage(self):
         # Open a connection to the serial port 
-               
-        ser = serial.Serial('COM3', 115200, timeout=1)
+
+        db_object = input.objects.get(id = 1)
+        ser = serial.Serial(db_object.serial_port, db_object.baud_rate, timeout=db_object.timeout)
 
         import sys
         sys.path.insert(0, '../Code/interface/interfaceProject')
