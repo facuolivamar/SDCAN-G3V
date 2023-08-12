@@ -89,6 +89,14 @@
         let chartTemperatureData = [];
         let chartPressureData = [];
         let chartAltitudeData = [];
+        let chartLPGData = [];
+        let chartCH4Data = [];
+        let chartO3Data = [];
+        let chartCOData = [];
+        let chartCO2Data = [];
+        let chartNH4Data = [];
+        let chartToluenData = [];
+        let chartSpeedData = [];
         let chartRssiData = [];
         let chartLabel = [];
 
@@ -100,6 +108,14 @@
                 {name: 'Temperature', data: chartTemperatureData},
                 {name: 'Pressure', data: chartPressureData},
                 {name: 'Altitude', data: chartAltitudeData},
+                {name: 'LPG', data: chartLPGData},
+                {name: 'CH4', data: chartCH4Data},
+                {name: 'O3', data: chartO3Data},
+                {name: 'CO', data: chartCOData},
+                {name: 'CO2', data: chartCO2Data},
+                {name: 'NH4', data: chartNH4Data},
+                {name: 'Toluen', data: chartToluenData},
+                {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ],
             chart: {type: 'line', height: 350},
@@ -114,6 +130,14 @@
                 {name: 'Temperature', data: chartTemperatureData},
                 {name: 'Pressure', data: chartPressureData},
                 {name: 'Altitude', data: chartAltitudeData},
+                {name: 'LPG', data: chartLPGData},
+                {name: 'CH4', data: chartCH4Data},
+                {name: 'O3', data: chartO3Data},
+                {name: 'CO', data: chartCOData},
+                {name: 'CO2', data: chartCO2Data},
+                {name: 'NH4', data: chartNH4Data},
+                {name: 'Toluen', data: chartToluenData},
+                {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ]);
 
@@ -144,6 +168,14 @@
             const temperatureCell = document.createElement('td');
             const pressureCell = document.createElement('td');
             const altitudeCell = document.createElement('td');
+            const lpgCell = document.createElement('td');
+            const ch4Cell = document.createElement('td');
+            const o3Cell = document.createElement('td');
+            const coCell = document.createElement('td');
+            const co2Cell = document.createElement('td');
+            const nh4Cell = document.createElement('td');
+            const toluenCell = document.createElement('td');
+            const speedCell = document.createElement('td');
             const rssiCell = document.createElement('td');
 
             // Set the cell values from the received data
@@ -151,6 +183,14 @@
             temperatureCell.textContent = data.temperature;
             pressureCell.textContent = data.pressure;
             altitudeCell.textContent = data.altitude;
+            lpgCell.textContent = data.lpg;
+            ch4Cell.textContent = data.ch4;
+            o3Cell.textContent = data.o3;
+            coCell.textContent = data.co;
+            co2Cell.textContent = data.co2;
+            nh4Cell.textContent = data.nh4;
+            toluenCell.textContent = data.toluen;
+            speedCell.textContent = data.speed;
             rssiCell.textContent = data.rssi;
 
             // Insert the cells into the row
@@ -158,6 +198,14 @@
             row.appendChild(temperatureCell);
             row.appendChild(pressureCell);
             row.appendChild(altitudeCell);
+            row.appendChild(lpgCell);
+            row.appendChild(ch4Cell);
+            row.appendChild(o3Cell);
+            row.appendChild(coCell);
+            row.appendChild(co2Cell);
+            row.appendChild(nh4Cell);
+            row.appendChild(toluenCell);
+            row.appendChild(speedCell);
             row.appendChild(rssiCell);
 
             // Insert the row at the beginning of the table body
@@ -174,13 +222,29 @@
             chartAltitudeData.push(data.altitude);
             chartRssiData.push(data.rssi);
             chartLabel.push(data.datetime);
+            chartTemperatureData.push(data.lpg);
+            chartPressureData.push(data.ch4);
+            chartAltitudeData.push(data.o3);
+            chartRssiData.push(data.co);
+            chartLabel.push(data.co2);
+            chartAltitudeData.push(data.nh4);
+            chartRssiData.push(data.toluen);
+            chartLabel.push(data.speed);
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 10;
             if (chartTemperatureData.length > maxDataPoints) {
                 chartTemperatureData.shift();  // Remove the oldest data point
                 chartPressureData.shift();  // Remove the oldest data point
-                chartAltitudeData.shift();  // Remove the oldest data point
+                chartAltitudeData.shift();
+                chartLPGData.shift();  // Remove the oldest data point
+                chartCH4Data.shift();  // Remove the oldest data point
+                chartO3Data.shift(); // Remove the oldest data point
+                chartCOData.shift();  // Remove the oldest data point
+                chartCO2Data.shift(); // Remove the oldest data point
+                chartNH4Data.shift();  // Remove the oldest data point
+                chartToluenData.shift();  // Remove the oldest data point
+                chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
             }
