@@ -9,7 +9,7 @@ import time
 class dataProcessing():
 
     def __init__(self, data) -> None:
-        self.patternsDict = {
+        patternsDict = {
             'Temperature' : re.compile(r"Temperature = (\d\d.\d\d)"),
             'Pressure' : re.compile(r"Pressure = (\d\d\d\d\d)"),
             'Altitude' : re.compile(r"Altitude = (\d\d\d.\d\d)"),
@@ -28,23 +28,23 @@ class dataProcessing():
             'Speed': re.compile(r"Speed = (\d+)"),
         }
 
-        self.Temperature = self.patternsDict['Temperature'].search(data).group(1)
-        self.Pressure = self.patternsDict['Pressure'].search(data).group(1)
-        self.Altitude = self.patternsDict['Altitude'].search(data).group(1)
-        self.RSSI = self.patternsDict['RSSI'].search(data).group(1)
+        self.Temperature = patternsDict['Temperature'].search(data).group(1)
+        self.Pressure = patternsDict['Pressure'].search(data).group(1)
+        self.Altitude = patternsDict['Altitude'].search(data).group(1)
+        self.RSSI = patternsDict['RSSI'].search(data).group(1)
 
         try:
-            self.LPG = self.patternsDict['LPG'].search(data).group(1)
-            self.CH4 = self.patternsDict['CH4'].search(data).group(1)
-            self.O3 = self.patternsDict['O3'].search(data).group(1)
-            self.CO = self.patternsDict['CO'].search(data).group(1)
-            self.CO2 = self.patternsDict['CO2'].search(data).group(1)
-            self.NH4 = self.patternsDict['NH4'].search(data).group(1) 
-            self.Toluen = self.patternsDict['Toluen'].search(data).group(1)
-            self.Particles = self.patternsDict['Particles'].search(data).group(1)
-            self.Latitude = self.patternsDict['Latitude'].search(data).group(1)
-            self.Longitude = self.patternsDict['Longitude'].search(data).group(1)
-            self.Speed = self.patternsDict['Speed'].search(data).group(1)
+            self.LPG = patternsDict['LPG'].search(data).group(1)
+            self.CH4 = patternsDict['CH4'].search(data).group(1)
+            self.O3 = patternsDict['O3'].search(data).group(1)
+            self.CO = patternsDict['CO'].search(data).group(1)
+            self.CO2 = patternsDict['CO2'].search(data).group(1)
+            self.NH4 = patternsDict['NH4'].search(data).group(1) 
+            self.Toluen = patternsDict['Toluen'].search(data).group(1)
+            self.Particles = patternsDict['Particles'].search(data).group(1)
+            self.Latitude = patternsDict['Latitude'].search(data).group(1)
+            self.Longitude = patternsDict['Longitude'].search(data).group(1)
+            self.Speed = patternsDict['Speed'].search(data).group(1)
         except Exception as e:
             print(f'something went wrong with MISION SECUNDARIA values: {e}')
 
@@ -56,47 +56,54 @@ class dataProcessing():
 
         return altura
 
-    def calcNOx(self, x):
-        NOx = x
+    # def calcNOx(self, x):
+    #     NOx = x
 
-        return NOx
+    #     return NOx
 
-    def calcCOVs(self, x):
-        COVs = x
+    # def calcCOVs(self, x):
+    #     COVs = x
 
-        return COVs
+    #     return COVs
 
-    def calcO3(self, x):
-        O3 = x
+    # def calcO3(self, x):
+    #     O3 = x
 
-        return O3
+    #     return O3
 
-    def calcCO2(self, x):
-        CO2 = x
+    # def calcCO2(self, x):
+    #     CO2 = x
 
-        return CO2
+    #     return CO2
+    
+    def calcAirQuality(self, x):
+        air_quality = x
+
+        return air_quality
 
 
 
-mock_data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = 37.7749, Longitude = -122.4194, Speed = 25"
+# mock_data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = 37.7749, Longitude = -122.4194, Speed = 25"
 
-# Create an instance of dataProcessing with mock data
-processed_data = dataProcessing(mock_data)
+# # Create an instance of dataProcessing with mock data
+# processed_data = dataProcessing(mock_data)
 
-print(processed_data.calcAltura.__doc__)
+# print(processed_data.calcAltura.__doc__)
 
-print("Temperature:", processed_data.Temperature)
-print("Pressure:", processed_data.Pressure)
-print("Altitude:", processed_data.Altitude)
-print("RSSI:", processed_data.RSSI)
-print("LPG:", processed_data.LPG)
-print("CH4:", processed_data.CH4)
-print("O3:", processed_data.O3)
-print("CO:", processed_data.CO)
-print("CO2:", processed_data.CO2)
-print("NH4:", processed_data.NH4)
-print("Toluen:", processed_data.Toluen)
-print("Particles:", processed_data.Particles)
-print("Latitude:", processed_data.Latitude)
-print("Longitude:", processed_data.Longitude)
-print("Speed:", processed_data.Speed)
+# print("Temperature:", processed_data.Temperature)
+# print("Pressure:", processed_data.Pressure)
+# print("Altitude:", processed_data.Altitude)
+# print("RSSI:", processed_data.RSSI)
+# print("LPG:", processed_data.LPG)
+# print("CH4:", processed_data.CH4)
+# print("O3:", processed_data.O3)
+# print("CO:", processed_data.CO)
+# print("CO2:", processed_data.CO2)
+# print("NH4:", processed_data.NH4)
+# print("Toluen:", processed_data.Toluen)
+# print("Particles:", processed_data.Particles)
+# print("Latitude:", processed_data.Latitude)
+# print("Longitude:", processed_data.Longitude)
+# print("Speed:", processed_data.Speed)
+
+# print(processed_data.__dict__)
