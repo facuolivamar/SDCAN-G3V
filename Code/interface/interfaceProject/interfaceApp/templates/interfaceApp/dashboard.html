@@ -59,6 +59,18 @@
           </div>
         </section>
 
+        <section class="section">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <h2 class="section-heading">Map Chart</h2>
+                  <div id="mapChart" style="height: 400px;"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
     <script>
 
@@ -177,6 +189,25 @@
         chart.render();
 
     </script>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+    // Elemento DIV donde se mostrará el mapa
+    var mapContainer = document.getElementById('mapChart');
+
+    // Crea un mapa Leaflet centrado en una ubicación específica
+    var myMap = L.map(mapContainer).setView([-31.36848952470408, -64.2476314344578], 11);
+
+    // Agrega un marcador a la ubicación
+    var marker = L.marker([-31.30523522145185, -64.26157707733432]).addTo(myMap);
+    marker.bindPopup("Ejemplo de ubicación");
+
+    // Agrega el mapa base de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(myMap);
+    </script>
+
 
 {% endblock section %}
 
