@@ -14,6 +14,14 @@
     <div class="sidebar-item">Temperature</div>
     <div class="sidebar-item">Pressure</div>
     <div class="sidebar-item">Altitude</div>
+    <div class="sidebar-item">Liquid Petrol Gas (LPG)</div>
+    <div class="sidebar-item">Methane (CH4)</div>
+    <div class="sidebar-item">Ozone (O3)</div>
+    <div class="sidebar-item">Carbon Monoxide (CO)</div>
+    <div class="sidebar-item">Carbon Dioxide (CO2)</div>
+    <div class="sidebar-item">Ammonium (NH4)</div>
+    <div class="sidebar-item">Toluene (C6H5CH3)</div>
+    <div class="sidebar-item">Speed</div>
     <div class="sidebar-item">RSSI</div>
 {% endblock sidebar-items %}
 
@@ -40,7 +48,7 @@
                                 <th>CO</th>
                                 <th>CO2</th>
                                 <th>NH4</th>
-                                <th>TOLUEN</th>
+                                <th>TOLUENE</th>
                                 <th>SPEED</th>
                                 <th>RSSI</th>
                             </tr>
@@ -95,7 +103,7 @@
         let chartCOData = [];
         let chartCO2Data = [];
         let chartNH4Data = [];
-        let chartToluenData = [];
+        let chartTolueneData = [];
         let chartSpeedData = [];
         let chartRssiData = [];
         let chartLabel = [];
@@ -114,7 +122,7 @@
                 {name: 'CO', data: chartCOData},
                 {name: 'CO2', data: chartCO2Data},
                 {name: 'NH4', data: chartNH4Data},
-                {name: 'Toluen', data: chartToluenData},
+                {name: 'Toluene', data: chartTolueneData},
                 {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ],
@@ -136,7 +144,7 @@
                 {name: 'CO', data: chartCOData},
                 {name: 'CO2', data: chartCO2Data},
                 {name: 'NH4', data: chartNH4Data},
-                {name: 'Toluen', data: chartToluenData},
+                {name: 'Toluene', data: chartTolueneData},
                 {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ]);
@@ -174,7 +182,7 @@
             const coCell = document.createElement('td');
             const co2Cell = document.createElement('td');
             const nh4Cell = document.createElement('td');
-            const toluenCell = document.createElement('td');
+            const tolueneCell = document.createElement('td');
             const speedCell = document.createElement('td');
             const rssiCell = document.createElement('td');
 
@@ -189,7 +197,7 @@
             coCell.textContent = data.co;
             co2Cell.textContent = data.co2;
             nh4Cell.textContent = data.nh4;
-            toluenCell.textContent = data.toluen;
+            tolueneCell.textContent = data.toluene;
             speedCell.textContent = data.speed;
             rssiCell.textContent = data.rssi;
 
@@ -204,7 +212,7 @@
             row.appendChild(coCell);
             row.appendChild(co2Cell);
             row.appendChild(nh4Cell);
-            row.appendChild(toluenCell);
+            row.appendChild(tolueneCell);
             row.appendChild(speedCell);
             row.appendChild(rssiCell);
 
@@ -228,7 +236,7 @@
             chartRssiData.push(data.co);
             chartLabel.push(data.co2);
             chartAltitudeData.push(data.nh4);
-            chartRssiData.push(data.toluen);
+            chartRssiData.push(data.toluene);
             chartLabel.push(data.speed);
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
@@ -243,7 +251,7 @@
                 chartCOData.shift();  // Remove the oldest data point
                 chartCO2Data.shift(); // Remove the oldest data point
                 chartNH4Data.shift();  // Remove the oldest data point
-                chartToluenData.shift();  // Remove the oldest data point
+                chartTolueneData.shift();  // Remove the oldest data point
                 chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
