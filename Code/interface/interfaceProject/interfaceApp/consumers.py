@@ -62,7 +62,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Open a connection to the serial port 
 
         db_object = await get_db_object()
-        ser = serial.Serial(db_object.serial_port, db_object.baud_rate, timeout=db_object.timeout)
+        # ser = serial.Serial(db_object.serial_port, db_object.baud_rate, timeout=db_object.timeout)
 
         import sys
         sys.path.insert(0, '../Code/interface/interfaceProject')
@@ -72,22 +72,26 @@ class ChatConsumer(AsyncWebsocketConsumer):
         while True:
             try:
                 # Read data from the serial port
-                if not ser.isOpen():
-                    ser.open()
+                # if not ser.isOpen():
+                    # ser.open()
 
-                data = ser.read(1000).decode('utf-8')
+                # data = ser.read(1000).decode('utf-8')
+                data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = 37.7749, Longitude = -122.4194, Speed = 25"
 
                 processed_data = dataProcessing(data)
                 
                 # Close the serial port connection
-                ser.close()
+                # ser.close()
 
                 df = pd.read_csv(csvFile)
                 df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
                 df.to_csv('data-receiver.csv', index=False)
                 
                 text_data = processed_data.__dict__
-                # text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude))
+                text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude)) 
+                text_data['estacion_terrena_latitude'] = str(db_object.estacion_terrena_latitude ) 
+                text_data['estacion_terrena_longitude'] = str(db_object.estacion_terrena_longitude ) 
+                print(text_data)
 
                 await self.send(text_data=json.dumps(text_data))
 
