@@ -8,10 +8,14 @@ import time
 from .baseClass import dataProcessing
 from .models import input
 
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 import pandas as pd
 
+@database_sync_to_async
+def get_db_object():
+    return input.objects.get(id = 1)
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -57,7 +61,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def csv_data_storage(self):
         # Open a connection to the serial port 
 
-        db_object = input.objects.get(id = 1)
+        db_object = await get_db_object()
         ser = serial.Serial(db_object.serial_port, db_object.baud_rate, timeout=db_object.timeout)
 
         import sys
@@ -83,7 +87,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 df.to_csv('data-receiver.csv', index=False)
                 
                 text_data = processed_data.__dict__
-                text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude))
+                # text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude))
 
                 await self.send(text_data=json.dumps(text_data))
 
