@@ -3,7 +3,7 @@
 <html>
 
 {% extends "interfaceApp/base.html" %}
-    <meta charset="utf-8"/>
+<meta charset="utf-8"/>
 {% block title %} <title>Dashboard</title> {% endblock title %}
 
 {% block navbar-title %} G3V-SDCAN {% endblock navbar-title %}
@@ -19,22 +19,22 @@
 
 {% block section %}
 
-        <section class="section">
-        
-          <div class="container">
-            
+    <section class="section">
+
+        <div class="container">
+
             <div class="row">
-              <div class="col-md-12">
-                <h2 class="section-heading">Table</h2>
+                <div class="col-md-12">
+                    <h2 class="section-heading">Table</h2>
                     <div class="table-container">
                         <table class="table table-bordered">
-                        <thead>
+                            <thead>
                             <tr>
-                            <th>Datetime</th>
-                            <th>Temperature</th>
-                            <th>Pressure</th>
-                            <th>Altitude</th>
-                            <th>LPG</th>
+                                <th>Datetime</th>
+                                <th>Temperature</th>
+                                <th>Pressure</th>
+                                <th>Altitude</th>
+                                <th>LPG</th>
                                 <th>CH4</th>
                                 <th>O3</th>
                                 <th>CO</th>
@@ -42,42 +42,42 @@
                                 <th>NH4</th>
                                 <th>TOLUEN</th>
                                 <th>SPEED</th>
-                            <th>RSSI</th>
+                                <th>RSSI</th>
                             </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
+                            </thead>
+                            <tbody id="table-body">
+                            </tbody>
                         </table>
                     </div>
-              </div>
+                </div>
             </div>
-          </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section">
-          <div class="container">
+    <section class="section">
+        <div class="container">
             <div class="row">
-              <div class="col-md-12">
-                <h2 class="section-heading">Chart 4</h2>
+                <div class="col-md-12">
+                    <h2 class="section-heading">Chart 4</h2>
                     <div id="chart-container">
                         <div id="lineChart"></div>
                     </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
-                  <h2 class="section-heading">Map Chart</h2>
-                  <div id="mapChart" style="height: 400px;"></div>
                 </div>
-              </div>
             </div>
-          </section>
-          
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="section-heading">Map Chart</h2>
+                    <div id="mapChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
     <script>
@@ -97,29 +97,29 @@
         // Create the chart and store the instance in a variable
         const chart = new ApexCharts(lineChart, {
             series: [
-                { name: 'Temperature', data: chartTemperatureData },
-                { name: 'Pressure', data: chartPressureData },
-                { name: 'Altitude', data: chartAltitudeData },
-                { name: 'RSSI', data: chartRssiData },
+                {name: 'Temperature', data: chartTemperatureData},
+                {name: 'Pressure', data: chartPressureData},
+                {name: 'Altitude', data: chartAltitudeData},
+                {name: 'RSSI', data: chartRssiData},
             ],
-            chart: { type: 'line', height: 350 },
-            xaxis: { categories: chartLabel },
-            yaxis: { title: { text: 'Value' } },
-            legend: { position: 'top' },
+            chart: {type: 'line', height: 350},
+            xaxis: {categories: chartLabel},
+            yaxis: {title: {text: 'Value'}},
+            legend: {position: 'top'},
         });
 
         function updateLineChart() {
             // Update the chart's datasets with the latest data arrays
             chart.updateSeries([
-                { name: 'Temperature', data: chartTemperatureData },
-                { name: 'Pressure', data: chartPressureData },
-                { name: 'Altitude', data: chartAltitudeData },
-                { name: 'RSSI', data: chartRssiData },
+                {name: 'Temperature', data: chartTemperatureData},
+                {name: 'Pressure', data: chartPressureData},
+                {name: 'Altitude', data: chartAltitudeData},
+                {name: 'RSSI', data: chartRssiData},
             ]);
-        
+
             // Update the chart
             chart.updateOptions({
-                xaxis: { categories: chartLabel },
+                xaxis: {categories: chartLabel},
             });
         }
 
@@ -129,15 +129,15 @@
             + '/ws/chat/room/'
         );
 
-        
+
         {% comment %} chatSocket.onopen = function(e) {
             // Connection is established, send initial data if needed
             chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
         }; {% endcomment %}
 
-        chatSocket.onmessage = function(e) {
+        chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-        
+
             // Create a new row for the table
             const row = document.createElement('tr');
             const datetimeCell = document.createElement('td');
@@ -174,7 +174,7 @@
             chartAltitudeData.push(data.altitude);
             chartRssiData.push(data.rssi);
             chartLabel.push(data.datetime);
-        
+
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 10;
             if (chartTemperatureData.length > maxDataPoints) {
@@ -184,12 +184,12 @@
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
             }
-        
+
             // Update the line chart with the updated data
             updateLineChart();
         };
-        
-        chatSocket.onclose = function(e) {
+
+        chatSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly');
         };
 
@@ -200,24 +200,24 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-    // Elemento DIV donde se mostrará el mapa
-    var mapContainer = document.getElementById('mapChart');
+        // Elemento DIV donde se mostrará el mapa
+        var mapContainer = document.getElementById('mapChart');
 
-    // Crea un mapa Leaflet centrado en una ubicación específica
-    var myMap = L.map(mapContainer).setView([-31.36848952470408, -64.2476314344578], 11);
+        // Crea un mapa Leaflet centrado en una ubicación específica
+        var myMap = L.map(mapContainer).setView([-31.36848952470408, -64.2476314344578], 11);
 
-    // Agrega un marcador a la ubicación
-    var marker = L.marker([-31.30523522145185, -64.26157707733432]).addTo(myMap);
-    marker.bindPopup("Ejemplo de ubicación");
+        // Agrega un marcador a la ubicación
+        var marker = L.marker([-31.30523522145185, -64.26157707733432]).addTo(myMap);
+        marker.bindPopup("Ejemplo de ubicación");
 
-    var marker2 = L.marker([-31.36877133763221, -64.24732928893968]).addTo(myMap);
-    marker2.bindPopup("Ejemplo de ubicación");
+        var marker2 = L.marker([-31.36877133763221, -64.24732928893968]).addTo(myMap);
+        marker2.bindPopup("Ejemplo de ubicación");
 
 
-    // Agrega el mapa base de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(myMap);
+        // Agrega el mapa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(myMap);
     </script>
 
 
