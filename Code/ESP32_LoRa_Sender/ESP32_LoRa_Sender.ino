@@ -18,44 +18,39 @@ TinyGPSPlus gps;
 int counter = 0;
 Adafruit_BMP085 bmp;
 
-
-/************************Hardware Related Macros************************************/
-#define Board_MQ4 ("LoRa ESP32")
-#define Pin_MQ4 (38)  //Analog input 4 of your arduino
-/***********************Software Related Macros************************************/
-#define Type_MQ4 ("MQ-4")  //MQ4
-#define Voltage_Resolution_MQ4 (3.3)
-#define ADC_Bit_Resolution_MQ4 (12)  // For arduino UNO/MEGA/NANO
-#define RatioMQ4CleanAir_MQ4 (4.4)   //RS / R0 = 60 ppm
-
-MQUnifiedsensor MQ4(Board_MQ4, Voltage_Resolution_MQ4, ADC_Bit_Resolution_MQ4, Pin_MQ4, Type_MQ4);
+#define Board ("LoRa ESP32")
+#define Voltage_Resolution (3.3)
+#define ADC_Bit_Resolution (12)
 
 
-#define Board_MQ131 ("LoRa ESP32")
-#define Voltage_Resolution_MQ131 (3.3)
-#define Pin_MQ131 (39)                 //Analog input 0 of your arduino
-#define Type_MQ131 ("MQ-131")          //MQ131
-#define ADC_Bit_Resolution_MQ131 (12)  // For arduino UNO/MEGA/NANO
-#define RatioMQ131CleanAir_MQ131 (15)  //RS / R0 = 15 ppm
-//#define calibration_button 13 //Pin to calibrate your sensor
-
-//Declare Sensor
-MQUnifiedsensor MQ131(Board_MQ131, Voltage_Resolution_MQ131, ADC_Bit_Resolution_MQ131, Pin_MQ131, Type_MQ131);
+//MQ4
+#define Type_MQ4 ("MQ-4")
+#define RatioMQ4CleanAir (4.4)
+#define Pin_MQ4 (38)
+MQUnifiedsensor MQ4(Board, Voltage_Resolution, ADC_Bit_Resolution, Pin_MQ4, Type_MQ4);
 
 
-#define Board_MQ135 ("LoRa ESP32")
-#define Voltage_Resolution_MQ135 (3.3)
-#define Pin_MQ135 (37) //Analog input 0 of your arduino
-#define Type_MQ135 ("MQ-135") //MQ135
-#define ADC_Bit_Resolution_MQ135 (12) // For arduino UNO/MEGA/NANO
-#define RatioMQ135CleanAir (3.6) //RS / R0 = 3.6 ppm  
+//MQ131
+#define Pin_MQ131 (39)                 
+#define Type_MQ131 ("MQ-131")          
+#define RatioMQ131CleanAir (15)  
+MQUnifiedsensor MQ131(Board, Voltage_Resolution, ADC_Bit_Resolution, Pin_MQ131, Type_MQ131);
 
-MQUnifiedsensor MQ135(Board_MQ135, Voltage_Resolution_MQ135, ADC_Bit_Resolution_MQ135, Pin_MQ135, Type_MQ135);
+
+//MQ135
+#define Pin_MQ135 (37)                 
+#define Type_MQ135 ("MQ-135")          
+#define RatioMQ135CleanAir (3.6)       
+MQUnifiedsensor MQ135(Board, Voltage_Resolution, ADC_Bit_Resolution, Pin_MQ135, Type_MQ135);
 
 
 void setup() {
   //initialize Serial Monitor
   Serial.begin(115200);
+  Serial.println();
+  Serial.println();
+  
+  neogps.begin(115200, SERIAL_8N1, RXD2, TXD2);
 
   MQ4.setRegressionMethod(1);
   MQ4.init();
@@ -65,100 +60,25 @@ void setup() {
   MQ131.setB(-1.11);
   MQ131.init();
 
-  Serial.print("Calibrating please wait.");
-  float calcR0_MQ4 = 0;
-  for (int i = 1; i <= 10; i++) {
-    MQ4.update();  // Update data, the arduino will read the voltage from the analog pin
-    calcR0_MQ4 += MQ4.calibrate(RatioMQ4CleanAir_MQ4);
-    Serial.print(".");
-  }
-  MQ4.setR0(calcR0_MQ4 / 10);
-  Serial.println("  done!.");
-
-  if (isinf(calcR0_MQ4)) {
-    Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply");
-    while (1)
-      ;
-  }
-  if (calcR0_MQ4 == 0) {
-    Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply");
-    while (1)
-      ;
-  }
-  /*****************************  MQ CAlibration ********************************************/
-
-
-
-  Serial.print("Calibrating please wait.");
-  float calcR0_MQ131 = 0;
-  for (int i = 1; i <= 10; i++) {
-    MQ131.update();  // Update data, the arduino will read the voltage from the analog pin
-    calcR0_MQ131 += MQ131.calibrate(RatioMQ131CleanAir_MQ131);
-    Serial.print(".");
-  }
-  MQ131.setR0(calcR0_MQ131 / 10);
-  Serial.println("  done!.");
-
-  if (isinf(calcR0_MQ131)) {
-    Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply");
-    while (1)
-      ;
-  }
-  if (calcR0_MQ131 == 0) {
-    Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply");
-    while (1)
-      ;
-  }
-  /*****************************  MQ CAlibration ********************************************/
-  MQ131.serialDebug(true);
-  Serial.println("Ignore Ratio = RS/R0, for this example we will use readSensorR0Rs, the ratio calculated will be R0/Rs. Thanks :)");
-
-
   MQ135.setRegressionMethod(1);
-  MQ135.init(); 
+  MQ135.init();
 
-  Serial.print("Calibrating please wait.");
-  float calcR0_MQ135 = 0;
-  for(int i = 1; i<=10; i ++)
-  {
-    MQ135.update(); // Update data, the arduino will read the voltage from the analog pin
-    calcR0_MQ135 += MQ135.calibrate(RatioMQ135CleanAir);
-    Serial.print(".");
-  }
-  MQ135.setR0(calcR0_MQ135/10);
-  Serial.println("  done!.");
-  
-  if(isinf(calcR0_MQ135)) {Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply"); while(1);}
-  if(calcR0_MQ135 == 0){Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply"); while(1);}
+  // Setups and Calibrates MQ4
+  setUpAndCalibrateMQ4();
 
+  // Setups and Calibrates MQ131
+  setUpAndCalibrateMQ131();
 
-  while (!Serial)
-    ;
-  Serial.println("LoRa Sender");
+  // Setups and Calibrates MQ135
+  setUpAndCalibrateMQ135();
 
-  //setup LoRa transceiver module
-  LoRa.setPins(ss, rst, dio0);
+  // Setup LoRa
+  setUpLoRa();
 
-  //replace the LoRa.begin(---E-) argument with your location's frequency
-  while (!LoRa.begin(865.0625E6)) {
-    Serial.println(".");
-    delay(500);
-  }
-
-  // Change sync word (0xF3) to match the receiver
-  // The sync word assures you don't get LoRa messages from other LoRa transceivers
-  // ranges from 0-0xFF
-  LoRa.setSyncWord(0xF3);
-  Serial.println("LoRa Initializing OK!");
+  // Check BMP
+  checkBMP();
 
 
-  if (!bmp.begin()) {
-    Serial.println("Could not find a valid BMP085 sensor, check wiring!");
-    while (1) {}
-  }
-
-
-  neogps.begin(9600, SERIAL_8N1, RXD2, TXD2);
 }
 
 void loop() {
@@ -167,78 +87,180 @@ void loop() {
 
   //Send LoRa packet to receiver
   LoRa.beginPacket();
-  LoRa.print("- Packet ");
-  LoRa.print(counter);
-  LoRa.print("\n");
+
+  printValue("Packet", counter, "");
 
 
-  LoRa.print("- Temperature = ");
-  LoRa.print(bmp.readTemperature());
-  LoRa.print(" *C \n");
-  LoRa.print("- Pressure = ");
-  LoRa.print(bmp.readPressure());
-  LoRa.println(" Pa");
-  LoRa.print("- Altitude = ");
-  LoRa.print(bmp.readAltitude());
-  LoRa.println(" meters");
+  printValue("Temperature", bmp.readTemperature(), "°C");
+  printValue("Pressure", bmp.readPressure(), "Pa");
+  printValue("Altitude", bmp.readAltitude(), "meters");
 
 
   MQ4.update();
-
-  MQ4.setA(3811.9);
-  MQ4.setB(-3.113);              // Configure the equation to to calculate CH4 concentration
-  float LPG = MQ4.readSensor();  // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
-
-
-  MQ4.setA(1012.7);
-  MQ4.setB(-2.786);              // Configure the equation to to calculate CH4 concentration
-  float CH4 = MQ4.readSensor();  // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
-
+  printValue("LPG", readLiquidPetrolGas(), "");
+  printValue("CH4", readMethane(), "");
 
   MQ131.update();
-
-  float O3 = MQ131.readSensor();
-
-
-  LoRa.print("- LPG: ");
-  LoRa.print(LPG);
-  LoRa.print("\n");
-  LoRa.print("- CH4: ");
-  LoRa.print(CH4);
-  LoRa.print("\n");
-  LoRa.print("- O3: ");
-  LoRa.print(O3);
-  LoRa.print("\n");
-
+  printValue("O3", MQ131.readSensor(), "");
 
   MQ135.update();
+  printValue("CO", readCarbonMonoxide(), "");
+  printValue("CO2", readCarbonDioxide(), "");
+  printValue("NH4", readAmmonium(), "");
+  printValue("Toluen", readToluen(), "");
 
-  MQ135.setA(605.18); MQ135.setB(-3.937); // Configure the equation to calculate CO concentration value
-  float CO = MQ135.readSensor(); // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
+  // Get locatioan and speed
+  getLocationAndSpeed();
 
-  MQ135.setA(110.47); MQ135.setB(-2.862); // Configure the equation to calculate CO2 concentration value
-  float CO2 = MQ135.readSensor(); // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
+  LoRa.endPacket();
 
-  MQ135.setA(102.2 ); MQ135.setB(-2.473); // Configure the equation to calculate NH4 concentration value
-  float NH4 = MQ135.readSensor(); // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
+  counter++;
 
-  MQ135.setA(44.947); MQ135.setB(-3.445); // Configure the equation to calculate Toluen concentration value
-  float Toluen = MQ135.readSensor(); // Sensor will read PPM concentration using the model, a and b values set previously or from the setup
+  delay(1000);
+}
 
 
-  LoRa.print("- CO: ");
-  LoRa.print(CO);
+void setUpAndCalibrateMQ4() {
+  Serial.print("Calibrating MQ4 please wait.");
+  float calcR0 = 0;
+  for (int i = 1; i <= 10; i++) {
+    MQ4.update();  // Update data, the arduino will read the voltage from the analog pin
+    calcR0 += MQ4.calibrate(RatioMQ4CleanAir);
+    Serial.print(".");
+  }
+  MQ4.setR0(calcR0 / 10);
+  Serial.println("  done!.");
+
+  if (isinf(calcR0)) {
+    Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply");
+    while (1)
+      ;
+  }
+  if (calcR0 == 0) {
+    Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply");
+    while (1)
+      ;
+  }
+}
+
+void setUpAndCalibrateMQ131() {
+  Serial.print("Calibrating MQ131 please wait.");
+  float calcR0 = 0;
+  for (int i = 1; i <= 10; i++) {
+    MQ131.update();  // Update data, the arduino will read the voltage from the analog pin
+    calcR0 += MQ131.calibrate(RatioMQ131CleanAir);
+    Serial.print(".");
+  }
+  MQ131.setR0(calcR0 / 10);
+  Serial.println("  done!.");
+
+  if (isinf(calcR0)) {
+    Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply");
+    while (1)
+      ;
+  }
+  if (calcR0 == 0) {
+    Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply");
+    while (1)
+      ;
+  }
+}
+
+void setUpAndCalibrateMQ135() {
+  Serial.print("Calibrating MQ135 please wait.");
+  float calcR0 = 0;
+  for (int i = 1; i <= 10; i++) {
+    MQ135.update();  // Update data, the arduino will read the voltage from the analog pin
+    calcR0 += MQ135.calibrate(RatioMQ135CleanAir);
+    Serial.print(".");
+  }
+  MQ135.setR0(calcR0 / 10);
+  Serial.println("  done!.");
+
+  if (isinf(calcR0)) {
+    Serial.println("Warning: Conection issue, R0 is infinite (Open circuit detected) please check your wiring and supply");
+    while (1)
+      ;
+  }
+  if (calcR0 == 0) {
+    Serial.println("Warning: Conection issue found, R0 is zero (Analog pin shorts to ground) please check your wiring and supply");
+    while (1)
+      ;
+  }
+}
+
+void setUpLoRa() {
+  while (!Serial)
+    ;
+  Serial.println("LoRa Sender");
+  LoRa.setPins(ss, rst, dio0);
+
+  while (!LoRa.begin(865.0625E6)) {
+    Serial.println(".");
+    delay(500);
+  }
+
+  LoRa.setSyncWord(0xF3);
+  Serial.println("LoRa Initializing OK!");
+}
+
+
+void checkBMP() {
+  if (!bmp.begin()) {
+    Serial.println("Could not find a valid BMP085 sensor, check wiring!");
+    while (1) {}
+  }
+}
+
+
+
+void printValue(char* valueName, double value, char* unit) {
+  LoRa.print("- ");
+  LoRa.print(valueName);
+  LoRa.print(": ");
+  LoRa.print(value);
+  LoRa.print(" ");
+  LoRa.print(unit);
   LoRa.print("\n");
-  LoRa.print("- CO2: ");
-  LoRa.print(CO2);
-  LoRa.print("\n");
-  LoRa.print("- NH4: ");
-  LoRa.print(NH4);
-  LoRa.print("\n");
-  LoRa.print("- Toluen: ");
-  LoRa.print(Toluen);
-  LoRa.print("\n");
+}
 
+float readLiquidPetrolGas() {
+  return readMQ4(3811.9, -3.113);
+}
+
+float readMethane() {
+  return readMQ4(1012.7, -2.786);
+}
+
+float readCarbonMonoxide() {
+  return readMQ135(605.18, -3.937);
+}
+
+float readCarbonDioxide() {
+  return readMQ135(110.47, -2.862);
+}
+
+float readAmmonium() {
+  return readMQ135(102.2, -2.473);
+}
+
+float readToluen() {
+  return readMQ135(44.947, -3.445);
+}
+
+float readMQ4(float a, float b) {
+  MQ4.setA(a);
+  MQ4.setB(b);
+  return MQ4.readSensor();
+}
+
+float readMQ135(float a, float b) {
+  MQ135.setA(a);
+  MQ135.setB(b);
+  return MQ135.readSensor();
+}
+
+void getLocationAndSpeed() {
 
   boolean Data = false;
   for (unsigned long start = millis(); millis() - start < 1000;) {
@@ -253,29 +275,24 @@ void loop() {
     Data = false;
 
     if (gps.location.isValid() == 1) {
-      LoRa.print("- Latitude: ");
-      LoRa.print(gps.location.lat(), 10);
-      LoRa.print("\n");
-      LoRa.print("- Longitude: ");
-      LoRa.print(gps.location.lng(), 10);
-      LoRa.print("\n");
 
+      printLocation();
 
       if (gps.speed.isValid() == 1) {
-        LoRa.print("- Speed: ");
-        LoRa.print(gps.speed.kmph());
-        LoRa.print(" km/h");
-        LoRa.print("\n");
+        printValue("Speed", gps.speed.kmph(), "km/h");
       }
 
     } else {
-      LoRa.print("No Data");
+      printValue("No Data", 404, "");
     }
-
-    LoRa.endPacket();
-
-    counter++;
-
-    delay(1000);
   }
+}
+
+void printLocation() {
+  LoRa.print("- Latitude: ");
+  LoRa.print(gps.location.lat(), 10);
+  LoRa.print("\n");
+  LoRa.print("- Longitude: ");
+  LoRa.print(gps.location.lng(), 10);
+  LoRa.print("\n");
 }

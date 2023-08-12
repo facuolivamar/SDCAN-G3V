@@ -9,13 +9,14 @@
 void setup() {
   //initialize Serial Monitor
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial)
+    ;
   Serial.println("LoRa Receiver");
 
   //setup LoRa transceiver module
   LoRa.setPins(ss, rst, dio0);
-  
-  //replace the LoRa.begin(---E-) argument with your location's frequency 
+
+  //replace the LoRa.begin(---E-) argument with your location's frequency
   while (!LoRa.begin(865.0625E6)) {
     Serial.println(".");
     delay(500);
@@ -33,16 +34,16 @@ void loop() {
   int packetSize = LoRa.parsePacket();
   if (packetSize) {
     // received a packet
-    
+
 
     // read packet
     while (LoRa.available()) {
       String LoRaData = LoRa.readString();
-      Serial.print(LoRaData); 
+      Serial.print(LoRaData);
     }
 
     // print RSSI of packet
-    Serial.print("- RSSI ");
+    Serial.print("\n- RSSI: ");
     Serial.println(LoRa.packetRssi());
     Serial.print("---------- \n");
   }
