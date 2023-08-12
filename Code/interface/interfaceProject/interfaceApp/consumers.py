@@ -83,7 +83,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 ser.close()
 
                 df = pd.read_csv(csvFile)
-                df.loc[len(df)] = [key for key in processed_data.__dict__]
+                df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
                 df.to_csv('data-receiver.csv', index=False)
                 
                 text_data = processed_data.__dict__
