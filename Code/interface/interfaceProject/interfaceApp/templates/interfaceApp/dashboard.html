@@ -3,7 +3,7 @@
 <html>
 
 {% extends "interfaceApp/base.html" %}
-    <meta charset="utf-8"/>
+<meta charset="utf-8"/>
 {% block title %} <title>Dashboard</title> {% endblock title %}
 
 {% block navbar-title %} G3V-SDCAN {% endblock navbar-title %}
@@ -14,63 +14,78 @@
     <div class="sidebar-item">Temperature</div>
     <div class="sidebar-item">Pressure</div>
     <div class="sidebar-item">Altitude</div>
+    <div class="sidebar-item">Liquid Petrol Gas (LPG)</div>
+    <div class="sidebar-item">Methane (CH4)</div>
+    <div class="sidebar-item">Ozone (O3)</div>
+    <div class="sidebar-item">Carbon Monoxide (CO)</div>
+    <div class="sidebar-item">Carbon Dioxide (CO2)</div>
+    <div class="sidebar-item">Ammonium (NH4)</div>
+    <div class="sidebar-item">Toluene (C6H5CH3)</div>
+    <div class="sidebar-item">Speed</div>
     <div class="sidebar-item">RSSI</div>
 {% endblock sidebar-items %}
 
 {% block section %}
 
-        <section class="section">
-        
-          <div class="container">
-            
+    <section class="section">
+
+        <div class="container">
+
             <div class="row">
-              <div class="col-md-12">
-                <h2 class="section-heading">Table</h2>
+                <div class="col-md-12">
+                    <h2 class="section-heading">Table</h2>
                     <div class="table-container">
                         <table class="table table-bordered">
-                        <thead>
+                            <thead>
                             <tr>
-                            {% comment %} <th>Datetime</th> {% endcomment %}
-                            <th>Temperature</th>
-                            <th>Pressure</th>
-                            <th>Altitude</th>
-                            <th>Altura</th>
-                            <th>RSSI</th>
+                                <th>Datetime</th>
+                                <th>Temperature</th>
+                                <th>Pressure</th>
+                                <th>Altitude</th>
+                                <th>LPG</th>
+                                <th>CH4</th>
+                                <th>O3</th>
+                                <th>CO</th>
+                                <th>CO2</th>
+                                <th>NH4</th>
+                                <th>TOLUENE</th>
+                                <th>SPEED</th>
+                                <th>RSSI</th>
                             </tr>
-                        </thead>
-                        <tbody id="table-body">
-                        </tbody>
+                            </thead>
+                            <tbody id="table-body">
+                            </tbody>
                         </table>
                     </div>
-              </div>
+                </div>
             </div>
-          </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section">
-          <div class="container">
+    <section class="section">
+        <div class="container">
             <div class="row">
-              <div class="col-md-12">
-                <h2 class="section-heading">Chart 4</h2>
+                <div class="col-md-12">
+                    <h2 class="section-heading">Chart 4</h2>
                     <div id="chart-container">
                         <div id="lineChart"></div>
                     </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
-                  <h2 class="section-heading">Map Chart</h2>
-                  <div id="mapChart" style="height: 400px;"></div>
                 </div>
-              </div>
             </div>
-          </section>
-          
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="section-heading">Map Chart</h2>
+                    <div id="mapChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
     <script>
@@ -82,6 +97,14 @@
         let chartTemperatureData = [];
         let chartPressureData = [];
         let chartAltitudeData = [];
+        let chartLPGData = [];
+        let chartCH4Data = [];
+        let chartO3Data = [];
+        let chartCOData = [];
+        let chartCO2Data = [];
+        let chartNH4Data = [];
+        let chartTolueneData = [];
+        let chartSpeedData = [];
         let chartRssiData = [];
         let chartLabel = [];
 
@@ -90,29 +113,45 @@
         // Create the chart and store the instance in a variable
         const chart = new ApexCharts(lineChart, {
             series: [
-                { name: 'Temperature', data: chartTemperatureData },
-                { name: 'Pressure', data: chartPressureData },
-                { name: 'Altitude', data: chartAltitudeData },
-                { name: 'RSSI', data: chartRssiData },
+                {name: 'Temperature', data: chartTemperatureData},
+                {name: 'Pressure', data: chartPressureData},
+                {name: 'Altitude', data: chartAltitudeData},
+                {name: 'LPG', data: chartLPGData},
+                {name: 'CH4', data: chartCH4Data},
+                {name: 'O3', data: chartO3Data},
+                {name: 'CO', data: chartCOData},
+                {name: 'CO2', data: chartCO2Data},
+                {name: 'NH4', data: chartNH4Data},
+                {name: 'Toluene', data: chartTolueneData},
+                {name: 'Speed', data: chartSpeedData},
+                {name: 'RSSI', data: chartRssiData},
             ],
-            chart: { type: 'line', height: 350 },
-            xaxis: { categories: chartLabel },
-            yaxis: { title: { text: 'Value' } },
-            legend: { position: 'top' },
+            chart: {type: 'line', height: 350},
+            xaxis: {categories: chartLabel},
+            yaxis: {title: {text: 'Value'}},
+            legend: {position: 'top'},
         });
 
         function updateLineChart() {
             // Update the chart's datasets with the latest data arrays
             chart.updateSeries([
-                { name: 'Temperature', data: chartTemperatureData },
-                { name: 'Pressure', data: chartPressureData },
-                { name: 'Altitude', data: chartAltitudeData },
-                { name: 'RSSI', data: chartRssiData },
+                {name: 'Temperature', data: chartTemperatureData},
+                {name: 'Pressure', data: chartPressureData},
+                {name: 'Altitude', data: chartAltitudeData},
+                {name: 'LPG', data: chartLPGData},
+                {name: 'CH4', data: chartCH4Data},
+                {name: 'O3', data: chartO3Data},
+                {name: 'CO', data: chartCOData},
+                {name: 'CO2', data: chartCO2Data},
+                {name: 'NH4', data: chartNH4Data},
+                {name: 'Toluene', data: chartTolueneData},
+                {name: 'Speed', data: chartSpeedData},
+                {name: 'RSSI', data: chartRssiData},
             ]);
-        
+
             // Update the chart
             chart.updateOptions({
-                xaxis: { categories: chartLabel },
+                xaxis: {categories: chartLabel},
             });
         }
 
@@ -122,21 +161,29 @@
             + '/ws/chat/room/'
         );
 
-        
+
         {% comment %} chatSocket.onopen = function(e) {
             // Connection is established, send initial data if needed
             chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
         }; {% endcomment %}
 
-        chatSocket.onmessage = function(e) {
+        chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-        
+
             // Create a new row for the table
             const row = document.createElement('tr');
             const datetimeCell = document.createElement('td');
             const temperatureCell = document.createElement('td');
             const pressureCell = document.createElement('td');
             const altitudeCell = document.createElement('td');
+            const lpgCell = document.createElement('td');
+            const ch4Cell = document.createElement('td');
+            const o3Cell = document.createElement('td');
+            const coCell = document.createElement('td');
+            const co2Cell = document.createElement('td');
+            const nh4Cell = document.createElement('td');
+            const tolueneCell = document.createElement('td');
+            const speedCell = document.createElement('td');
             const rssiCell = document.createElement('td');
 
             // Set the cell values from the received data
@@ -144,6 +191,14 @@
             temperatureCell.textContent = data.temperature;
             pressureCell.textContent = data.pressure;
             altitudeCell.textContent = data.altitude;
+            lpgCell.textContent = data.lpg;
+            ch4Cell.textContent = data.ch4;
+            o3Cell.textContent = data.o3;
+            coCell.textContent = data.co;
+            co2Cell.textContent = data.co2;
+            nh4Cell.textContent = data.nh4;
+            tolueneCell.textContent = data.toluene;
+            speedCell.textContent = data.speed;
             rssiCell.textContent = data.rssi;
 
             // Insert the cells into the row
@@ -151,6 +206,14 @@
             row.appendChild(temperatureCell);
             row.appendChild(pressureCell);
             row.appendChild(altitudeCell);
+            row.appendChild(lpgCell);
+            row.appendChild(ch4Cell);
+            row.appendChild(o3Cell);
+            row.appendChild(coCell);
+            row.appendChild(co2Cell);
+            row.appendChild(nh4Cell);
+            row.appendChild(tolueneCell);
+            row.appendChild(speedCell);
             row.appendChild(rssiCell);
 
             // Insert the row at the beginning of the table body
@@ -167,22 +230,38 @@
             chartAltitudeData.push(data.altitude);
             chartRssiData.push(data.rssi);
             chartLabel.push(data.datetime);
-        
+            chartTemperatureData.push(data.lpg);
+            chartPressureData.push(data.ch4);
+            chartAltitudeData.push(data.o3);
+            chartRssiData.push(data.co);
+            chartLabel.push(data.co2);
+            chartAltitudeData.push(data.nh4);
+            chartRssiData.push(data.toluene);
+            chartLabel.push(data.speed);
+
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 10;
             if (chartTemperatureData.length > maxDataPoints) {
                 chartTemperatureData.shift();  // Remove the oldest data point
                 chartPressureData.shift();  // Remove the oldest data point
-                chartAltitudeData.shift();  // Remove the oldest data point
+                chartAltitudeData.shift();
+                chartLPGData.shift();  // Remove the oldest data point
+                chartCH4Data.shift();  // Remove the oldest data point
+                chartO3Data.shift(); // Remove the oldest data point
+                chartCOData.shift();  // Remove the oldest data point
+                chartCO2Data.shift(); // Remove the oldest data point
+                chartNH4Data.shift();  // Remove the oldest data point
+                chartTolueneData.shift();  // Remove the oldest data point
+                chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
             }
-        
+
             // Update the line chart with the updated data
             updateLineChart();
         };
-        
-        chatSocket.onclose = function(e) {
+
+        chatSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly');
         };
 
@@ -193,24 +272,24 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-    // Elemento DIV donde se mostrará el mapa
-    var mapContainer = document.getElementById('mapChart');
+        // Elemento DIV donde se mostrará el mapa
+        var mapContainer = document.getElementById('mapChart');
 
-    // Crea un mapa Leaflet centrado en una ubicación específica
-    var myMap = L.map(mapContainer).setView([-31.36848952470408, -64.2476314344578], 11);
+        // Crea un mapa Leaflet centrado en una ubicación específica
+        var myMap = L.map(mapContainer).setView([-31.36848952470408, -64.2476314344578], 11);
 
-    // Agrega un marcador a la ubicación
-    var marker = L.marker([-31.30523522145185, -64.26157707733432]).addTo(myMap);
-    marker.bindPopup("Ejemplo de ubicación");
+        // Agrega un marcador a la ubicación
+        var marker = L.marker([-31.30523522145185, -64.26157707733432]).addTo(myMap);
+        marker.bindPopup("Ejemplo de ubicación");
 
-    var marker2 = L.marker([-31.36877133763221, -64.24732928893968]).addTo(myMap);
-    marker2.bindPopup("Ejemplo de ubicación");
+        var marker2 = L.marker([-31.36877133763221, -64.24732928893968]).addTo(myMap);
+        marker2.bindPopup("Ejemplo de ubicación");
 
 
-    // Agrega el mapa base de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(myMap);
+        // Agrega el mapa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(myMap);
     </script>
 
 
