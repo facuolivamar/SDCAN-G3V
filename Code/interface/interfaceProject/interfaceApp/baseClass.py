@@ -27,6 +27,8 @@ class dataProcessing():
             'Longitude': re.compile(r"Longitude = ([\d.-]+)"),
             'Speed': re.compile(r"Speed = (\d+)"),
         }
+        
+        self.datetime = time.ctime(time.time())
 
         self.Temperature = patternsDict['Temperature'].search(data).group(1)
         self.Pressure = patternsDict['Pressure'].search(data).group(1)
@@ -107,3 +109,9 @@ class dataProcessing():
 # print("Speed:", processed_data.Speed)
 
 # print(processed_data.__dict__)
+
+# text_data = processed_data.__dict__
+# x = [key for key in text_data]
+# print(x)
+
+# print(text_data)

@@ -5,6 +5,7 @@ import serial
 import pandas as pd
 import re
 import time
+from baseClass import dataProcessing
 
 
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -71,44 +72,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 data = ser.read(1000).decode('utf-8')
 
-                # print(f"Received data: {data}")
-
-                temperaturePattern = re.compile(r"Temperature = (\d\d.\d\d)")
-                temperature = temperaturePattern.search(data).group(1)
-
-                pressurePattern = re.compile(r"Pressure = (\d\d\d\d\d)")
-                pressure = pressurePattern.search(data).group(1)
-
-                altitudePattern = re.compile(r"Altitude = (\d\d\d.\d\d)")
-                altitude = altitudePattern.search(data).group(1)
-
-                rssiPattern = re.compile(r"RSSI (-\d\d)")
-                rssi = rssiPattern.search(data).group(1)
-
-                # print(f"Packet: {packet}")
-                print(f"Temperature: {temperature}")
-                print(f"Pressure: {pressure}")
-                print(f"Altitude: {altitude}")
-                print(f"RSSI: {rssi}")
+                processed_data = dataProcessing(data)
                 
                 # Close the serial port connection
                 ser.close()
 
                 df = pd.read_csv(csvFile)
-
-                df.loc[len(df)] = [time.ctime(time.time()),temperature, pressure, altitude, rssi]
-
-                # print(df)
-
+                df.loc[len(df)] = [key for key in processed_data.__dict__]
                 df.to_csv('data-receiver.csv', index=False)
+                
+                text_data = processed_data.__dict__
 
-                await self.send(text_data=json.dumps({
-                    "datetime": str(time.ctime(time.time())),
-                    "temperature": str(temperature),
-                    "pressure": str(pressure),
-                    "altitude": str(altitude),
-                    "rssi": str(rssi),
-                    }))
+                await self.send(text_data=json.dumps(text_data))
 
                 await asyncio.sleep(3)
 
