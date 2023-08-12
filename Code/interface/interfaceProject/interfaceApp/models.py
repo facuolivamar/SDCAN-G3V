@@ -9,6 +9,8 @@ class input(models.Model):
     
     estacion_terrena_latitude = models.FloatField(blank=False, null=False)
     estacion_terrena_longitude = models.FloatField(blank=False, null=False)
+    
+    estacion_terrena_altitude = models.FloatField(blank=False, null=False)
 
     # history = HistoricalRecords()
 
