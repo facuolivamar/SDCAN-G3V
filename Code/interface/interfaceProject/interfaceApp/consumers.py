@@ -46,6 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         sys.path.insert(0, '../Code/interface/interfaceProject')
         
         csvFile = 'data-receiver.csv'
+        xlsxFile = 'data-receiver.xlsx'
 
         while True:
             try:
@@ -63,7 +64,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
                 df = pd.read_csv(csvFile)
                 df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
-                df.to_csv('data-receiver.csv', index=False)
+                df.to_csv(csvFile, index=False)
+
+                df = pd.read_excel(xlsxFile)
+                df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
+                df.to_excel(xlsxFile, index=False)
                 
                 text_data = processed_data.__dict__
                 text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude)) 
