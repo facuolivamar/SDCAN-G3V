@@ -8,7 +8,7 @@
 
 {% block navbar-title %} G3V-SDCAN {% endblock navbar-title %}
 
-{% block sidebar-title %} Measurements {% endblock sidebar-title %}
+{% block sidebar-title %} Real time data {% endblock sidebar-title %}
 
 {% block sidebar-items %}
     {% comment %} <div class="sidebar-item">Temperature</div>
@@ -81,6 +81,19 @@
                 <div class="col-md-12">
                     <h2 class="section-heading">Map Chart</h2>
                     <div id="mapChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="section-heading">Gas Concentration Chart</h2>
+                    <div id="chart-container">
+                        <div id="gasChart"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -284,6 +297,38 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(myMap);
+
+            const gasChartOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                    },
+                },
+                series: [
+                    { name: 'LPG', data: [150] },
+                    { name: 'CH4', data: [80] },
+                    { name: 'O3', data: [30] },
+                    { name: 'CO', data: [300] },
+                    { name: 'CO2', data: [400] },
+                    { name: 'NH4', data: [50] },
+                    { name: 'Toluen', data: [10] },
+                ],
+                xaxis: {
+                    categories: ['Gases'],
+                },
+                legend: {
+                    position: 'top',
+                },
+            };
+    
+            // Renderiza el gráfico de concentración de gases
+            const gasChart = new ApexCharts(document.querySelector('#gasChart'), gasChartOptions);
+            gasChart.render();
         };
 
         chatSocket.onclose = function (e) {
