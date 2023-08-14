@@ -134,3 +134,14 @@ class dataProcessing():
 # print(x)
 
 # print(text_data)
+
+# import sys
+# sys.path.insert(0, '../Code/interface/interfaceProject')
+        
+# csvFile = 'data-receiver.xlsx'
+
+# import pandas as pd
+# df = pd.DataFrame(columns=x)
+# new_row = {key: processed_data.__dict__[key] for key in processed_data.__dict__}
+# df = df._append(new_row, ignore_index=True)
+# df.to_excel(csvFile, index=False)
