@@ -11,7 +11,7 @@
 {% block sidebar-title %} Measurements {% endblock sidebar-title %}
 
 {% block sidebar-items %}
-    <div class="sidebar-item">Temperature</div>
+    {% comment %} <div class="sidebar-item">Temperature</div>
     <div class="sidebar-item">Pressure</div>
     <div class="sidebar-item">Altitude</div>
     <div class="sidebar-item">Liquid Petrol Gas (LPG)</div>
@@ -22,7 +22,7 @@
     <div class="sidebar-item">Ammonium (NH4)</div>
     <div class="sidebar-item">Toluen (C6H5CH3)</div>
     <div class="sidebar-item">Speed</div>
-    <div class="sidebar-item">RSSI</div>
+    <div class="sidebar-item">RSSI</div> {% endcomment %}
 {% endblock sidebar-items %}
 
 {% block section %}
@@ -33,12 +33,12 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="section-heading">Table</h2>
+                    <h2 class="section-heading">Measurements</h2>
                     <div class="table-container">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Time</th>
+                                <th>time</th>
                                 <th>Temperature</th>
                                 <th>Pressure</th>
                                 <th>Altitude</th>
@@ -92,7 +92,7 @@
         <script>
 
         const tableBody = document.getElementById('table-body');
-        const maxRows = 10;
+        const maxRows = 5;
 
         // Define empty arrays for storing data points
         let chartTemperatureData = [];
