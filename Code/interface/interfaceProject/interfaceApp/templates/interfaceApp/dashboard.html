@@ -250,7 +250,7 @@
             chartPressureData.push(data.pressure);
             chartAltitudeData.push(data.altitude);
             chartRssiData.push(data.rssi);
-            chartLabel.push(data.datetime);
+            chartLabel.push(formattedTime);
             chartTemperatureData.push(data.lpg);
             chartPressureData.push(data.ch4);
             chartAltitudeData.push(data.o3);
@@ -310,13 +310,13 @@
                     },
                 },
                 series: [
-                    { name: 'LPG', data: [150] },
-                    { name: 'CH4', data: [80] },
-                    { name: 'O3', data: [30] },
-                    { name: 'CO', data: [300] },
-                    { name: 'CO2', data: [400] },
-                    { name: 'NH4', data: [50] },
-                    { name: 'Toluen', data: [10] },
+                    { name: 'LPG', data: [data.LPG] },
+                    { name: 'CH4', data: [data.CH4] },
+                    { name: 'O3', data: [data.O3] },
+                    { name: 'CO', data: [data.CO] },
+                    { name: 'CO2', data: [data.CO2] },
+                    { name: 'NH4', data: [data.NH4] },
+                    { name: 'Toluen', data: [data.Toluen] },
                 ],
                 xaxis: {
                     categories: ['Gases'],
