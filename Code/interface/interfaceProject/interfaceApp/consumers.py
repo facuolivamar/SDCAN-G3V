@@ -54,7 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     # ser.open()
 
                 # data = ser.read(1000).decode('utf-8')
-                data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = 37.7749, Longitude = -122.4194, Speed = 25"
+                data = "Temperature = 25.65, Pressure = 98765, Altitude = 123.45, RSSI -20, LPG = 45.67, CH4 = 12.34, O3 = 0.045, CO = 123, CO2 = 789, NH4 = 0.005, Toluen = 56.78, Particles = 1234, Latitude = -31.311917095809132, Longitude = -64.21414105773533, Speed = 25"
 
                 processed_data = dataProcessing(data)
                 

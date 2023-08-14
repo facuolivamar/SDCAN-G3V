@@ -285,12 +285,19 @@
             var mapContainer = document.getElementById('mapChart');
 
             // Crea un mapa Leaflet centrado en una ubicación específica
-            var myMap = L.map(mapContainer).setView([-31.149410878892017, -64.34213611719193], 15);
+            const estacion_terrena_latitude = data.estacion_terrena_latitude;
+            const estacion_terrena_longitude = data.estacion_terrena_longitude;
+            var myMap = L.map(mapContainer).setView([estacion_terrena_latitude, estacion_terrena_longitude], 15);
 
             // Agrega un marcador a la ubicación
-            var marker = L.marker([-31.149410878892017, -64.34213611719193]).addTo(myMap);
-            marker.bindPopup("Emabalse La Quebrada");
+            var marker1 = L.marker([estacion_terrena_latitude, estacion_terrena_longitude]).addTo(myMap);
+            marker1.bindPopup("Estacion Terrena");
 
+            const estacion_espacial_latitude = data.Latitude;
+            const estacion_espacial_longitude = data.Longitude;            
+            // Agrega un marcador a la ubicación
+            var marker2 = L.marker([estacion_espacial_latitude, estacion_espacial_longitude]).addTo(myMap);
+            marker2.bindPopup("Estacion Espacial");
 
 
             // Agrega el mapa base de OpenStreetMap
