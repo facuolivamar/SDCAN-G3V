@@ -222,7 +222,7 @@
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 5;
-            if (lineChart.length > maxDataPoints) {
+            if (chartRssiData.length > maxDataPoints) {
                 chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
