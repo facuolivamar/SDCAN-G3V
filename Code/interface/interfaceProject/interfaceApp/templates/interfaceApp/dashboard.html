@@ -108,16 +108,6 @@
         const maxRows = 5;
 
         // Define empty arrays for storing data points
-        let chartTemperatureData = [];
-        let chartPressureData = [];
-        let chartAltitudeData = [];
-        let chartLPGData = [];
-        let chartCH4Data = [];
-        let chartO3Data = [];
-        let chartCOData = [];
-        let chartCO2Data = [];
-        let chartNH4Data = [];
-        let chartToluenData = [];
         let chartSpeedData = [];
         let chartRssiData = [];
         let chartLabel = [];
@@ -127,16 +117,6 @@
         // Create the chart and store the instance in a variable
         const chart = new ApexCharts(lineChart, {
             series: [
-                {name: 'Temperature', data: chartTemperatureData},
-                {name: 'Pressure', data: chartPressureData},
-                {name: 'Altitude', data: chartAltitudeData},
-                {name: 'LPG', data: chartLPGData},
-                {name: 'CH4', data: chartCH4Data},
-                {name: 'O3', data: chartO3Data},
-                {name: 'CO', data: chartCOData},
-                {name: 'CO2', data: chartCO2Data},
-                {name: 'NH4', data: chartNH4Data},
-                {name: 'Toluen', data: chartToluenData},
                 {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ],
@@ -149,16 +129,6 @@
         function updateLineChart() {
             // Update the chart's datasets with the latest data arrays
             chart.updateSeries([
-                {name: 'Temperature', data: chartTemperatureData},
-                {name: 'Pressure', data: chartPressureData},
-                {name: 'Altitude', data: chartAltitudeData},
-                {name: 'LPG', data: chartLPGData},
-                {name: 'CH4', data: chartCH4Data},
-                {name: 'O3', data: chartO3Data},
-                {name: 'CO', data: chartCOData},
-                {name: 'CO2', data: chartCO2Data},
-                {name: 'NH4', data: chartNH4Data},
-                {name: 'Toluen', data: chartToluenData},
                 {name: 'Speed', data: chartSpeedData},
                 {name: 'RSSI', data: chartRssiData},
             ]);
@@ -246,33 +216,13 @@
             }
 
             // Update the chart data arrays with the new values
-            chartTemperatureData.push(data.temperature);
-            chartPressureData.push(data.pressure);
-            chartAltitudeData.push(data.altitude);
-            chartRssiData.push(data.rssi);
+            chartSpeedData.push(data.Speed);
+            chartRssiData.push(data.RSSI);
             chartLabel.push(formattedTime);
-            chartTemperatureData.push(data.lpg);
-            chartPressureData.push(data.ch4);
-            chartAltitudeData.push(data.o3);
-            chartRssiData.push(data.co);
-            chartLabel.push(data.co2);
-            chartAltitudeData.push(data.nh4);
-            chartRssiData.push(data.Toluen);
-            chartLabel.push(data.speed);
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
-            const maxDataPoints = 10;
-            if (chartTemperatureData.length > maxDataPoints) {
-                chartTemperatureData.shift();  // Remove the oldest data point
-                chartPressureData.shift();  // Remove the oldest data point
-                chartAltitudeData.shift();
-                chartLPGData.shift();  // Remove the oldest data point
-                chartCH4Data.shift();  // Remove the oldest data point
-                chartO3Data.shift(); // Remove the oldest data point
-                chartCOData.shift();  // Remove the oldest data point
-                chartCO2Data.shift(); // Remove the oldest data point
-                chartNH4Data.shift();  // Remove the oldest data point
-                chartToluenData.shift();  // Remove the oldest data point
+            const maxDataPoints = 5;
+            if (lineChart.length > maxDataPoints) {
                 chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point
