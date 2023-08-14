@@ -62,6 +62,3 @@ YouTube Channel: [EVIE SDCAN](https://www.youtube.com/@ITSV-SDCAN)
 Instagram Account: [@sdcan_itsv](https://www.instagram.com/sdcan_itsv/)
 
 For a detailed description and visual representation of the project, please refer to the [project video](https://www.youtube.com/watch?v=PZLdEqGG1FY&ab_channel=ITSV-SDCAN).
-
-## Conclusion
-The Salas Cuna project aims to develop a CANSAT capable of measuring pollution levels in the Province of Córdoba. With its primary mission of sensing pressure and temperature, and a secondary mission focused on studying pollution factors, the project seeks to provide valuable environmental data. The project team from Instituto Técnico Salesiano Villada demonstrates a high level of expertise and commitment to achieving the mission objectives.
