@@ -38,7 +38,7 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Datetime</th>
+                                <th>Time</th>
                                 <th>Temperature</th>
                                 <th>Pressure</th>
                                 <th>Altitude</th>
@@ -187,8 +187,15 @@
             const speedCell = document.createElement('td');
             const rssiCell = document.createElement('td');
 
+            var dateString = data.datetime;
+            var date = new Date(dateString);
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var seconds = date.getSeconds();
+            var formattedTime = (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") +  minutes + ":" + (seconds < 10 ? "0" : "")  + seconds;
+
             // Set the cell values from the received data
-            datetimeCell.textContent = data.datetime;
+            datetimeCell.textContent = formattedTime;
             temperatureCell.textContent = data.Temperature;
             pressureCell.textContent = data.Pressure;
             altitudeCell.textContent = data.Altitude;
