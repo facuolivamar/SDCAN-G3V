@@ -50,7 +50,7 @@ void setup() {
   Serial.println();
   Serial.println();
   
-  neogps.begin(115200, SERIAL_8N1, RXD2, TXD2);
+  // neogps.begin(115200, SERIAL_8N1, RXD2, TXD2);
 
   MQ4.setRegressionMethod(1);
   MQ4.init();
@@ -110,13 +110,13 @@ void loop() {
   printValue("Toluen", readToluen(), "");
 
   // Get locatioan and speed
-  getLocationAndSpeed();
+  //getLocationAndSpeed();
 
   LoRa.endPacket();
 
   counter++;
 
-  delay(1000);
+  delay(10);
 }
 
 
