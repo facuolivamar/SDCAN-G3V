@@ -66,9 +66,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="section-heading">Chart 4</h2>
+                    <h2 class="section-heading">Gas Concentration Chart</h2>
                     <div id="chart-container">
-                        <div id="lineChart"></div>
+                        <div id="gasChart"></div>
                     </div>
                 </div>
             </div>
@@ -90,15 +90,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="section-heading">Gas Concentration Chart</h2>
+                    <h2 class="section-heading">Line chart</h2>
                     <div id="chart-container">
-                        <div id="gasChart"></div>
+                        <div id="lineChart"></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
@@ -222,7 +221,7 @@
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 5;
-            if (lineChart.length > maxDataPoints) {
+            if (chartRssiData.length > maxDataPoints) {
                 chartSpeedData.shift() // Remove the oldest data point
                 chartRssiData.shift();  // Remove the oldest data point
                 chartLabel.shift();  // Remove the oldest data point

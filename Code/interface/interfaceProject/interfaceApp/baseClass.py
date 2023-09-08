@@ -14,7 +14,8 @@ class dataProcessing():
             'Pressure' : re.compile(r"Pressure = (\d\d\d\d\d)"),
             'Altitude' : re.compile(r"Altitude = (\d\d\d.\d\d)"),
             'RSSI' : re.compile(r"RSSI (-\d\d)"),
-            
+
+            'NO2': re.compile(r"LPG = (\d.\d\d\d)"),
             'LPG': re.compile(r"LPG = (\d\d.\d\d)"),
             'CH4': re.compile(r"CH4 = (\d\d.\d\d)"),
             'O3': re.compile(r"O3 = (\d\.\d\d\d)"),
@@ -36,6 +37,7 @@ class dataProcessing():
         self.RSSI = patternsDict['RSSI'].search(data).group(1)
 
         try:
+            # self.NO2 = patternsDict['NO2'].search(data).group(1)
             self.LPG = patternsDict['LPG'].search(data).group(1)
             self.CH4 = patternsDict['CH4'].search(data).group(1)
             self.O3 = patternsDict['O3'].search(data).group(1)
@@ -79,9 +81,26 @@ class dataProcessing():
     #     return CO2
     
     def calcAirQuality(self, x):
-        air_quality = x
+        '''
+        Calculate air quality based on US EPA criteria
+        '''
+        calcs_result = float
 
-        return air_quality
+        air_quality_level = int
+
+        quality_index = {
+            '50' : 1,
+            '100' : 2,
+            '200' : 3,
+            '300' : 4,
+            '400' : 5,
+        }
+        
+        for key in quality_index:
+            if calcs_result < key:
+                air_quality_level = quality_index[key]
+
+        return air_quality_level
 
 
 
@@ -115,3 +134,14 @@ class dataProcessing():
 # print(x)
 
 # print(text_data)
+
+# import sys
+# sys.path.insert(0, '../Code/interface/interfaceProject')
+        
+# csvFile = 'data-receiver.xlsx'
+
+# import pandas as pd
+# df = pd.DataFrame(columns=x)
+# new_row = {key: processed_data.__dict__[key] for key in processed_data.__dict__}
+# df = df._append(new_row, ignore_index=True)
+# df.to_excel(csvFile, index=False)
