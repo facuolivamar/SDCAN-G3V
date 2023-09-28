@@ -8,11 +8,11 @@ import datetime
 import os
 
 csv_filename = 'data-receiver-150ms.csv'
-csv_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject/interfaceApp'
+csv_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject'
 csv_path = os.path.join(csv_directory, csv_filename)
 
 xlsx_filename = 'data-receiver-150ms.xlsx'
-xlsx_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject/interfaceApp'
+xlsx_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject'
 xlsx_path = os.path.join(xlsx_directory, xlsx_filename)
 
 async def read_serial_data():
