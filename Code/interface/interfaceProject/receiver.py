@@ -27,7 +27,9 @@ async def read_serial_data():
             
             # Define a regular expression pattern to capture the values
             pattern = re.compile(r"Received packet.*?(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+\.\d+)\s+(\d+)\s+(\d+\.\d+)", re.DOTALL)
+            # pattern = re.compile(r" *?(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+\.\d+)\s+(\d+)\s+(\d+\.\d+)", re.DOTALL)
 
+            # print(data)
             # Find all matches in the text
             matches = pattern.findall(data)
 
@@ -51,10 +53,13 @@ async def read_serial_data():
 
             # Create a DataFrame from the list of dictionaries
             df = pd.DataFrame(data_list)
+            
+            print(matches)
 
             # Append the DataFrame to an existing CSV file or create a new one
             if os.path.exists(csv_path):
                 df.to_csv(csv_path, mode='a', header=False, index=False)
+                print(df)
             else:
                 df.to_csv(csv_path, index=False)
 
