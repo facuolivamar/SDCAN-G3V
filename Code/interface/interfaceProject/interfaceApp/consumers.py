@@ -59,7 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             try:
 
                 
-                df = pd.read_csv(csv_path)
+                df = pd.read_csv(csv_path, on_bad_lines='skip')
                 last_row = df.iloc[len(df)-1].to_dict()
 
                 obj = processingClass(dict(last_row))
