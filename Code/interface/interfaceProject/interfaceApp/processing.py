@@ -1,23 +1,6 @@
-import pandas as pd
+
 import os
 
-csv_filename = 'data-receiver-150ms.csv'
-csv_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject/interfaceApp'
-csv_path = os.path.join(csv_directory, csv_filename)
-
-df = pd.read_csv(csv_path)
-last_row = df.iloc[len(df)-1]
-
-testDict = {
-    'datetime': 'Wed Sep 27 13:23:21 2023',
-    'dust': 2096,
-    'mq135': 0,
-    'mq131': 0,
-    'mq4': 0,
-    'temperature': 24.7,
-    'pressure': 96343,
-    'altitude': 422.95,
-}
 
 class processingClass():
     """
@@ -75,7 +58,7 @@ class processingClass():
                 },
             },
             'MQ131':{
-                '03': {
+                'O3': {
                     'a':23.943,
                     'b': -1.11
                 },
@@ -117,10 +100,11 @@ class processingClass():
                         
                     setattr(self, molecula, ppm)  # Dynamically set the attribute
 
-                    print(f'molecula: {molecula} ppm: {ppm}')
+                    # print(f'molecula: {molecula} ppm: {ppm}')
 
-                    print(f'self.{molecula}: {getattr(self, molecula)}')
+                    # print(f'self.{molecula}: {getattr(self, molecula)}')
 
 
-obj = processingClass(dict(last_row))
-print(obj.__doc__)
+# obj = processingClass(dict(last_row))
+# print(obj.__doc__)
+# print(obj.__dict__)

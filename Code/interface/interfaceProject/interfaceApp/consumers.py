@@ -8,10 +8,14 @@ import time
 from .baseClass import dataProcessing
 from .models import input
 
+import os
+
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 import pandas as pd
+
+from .processing import processingClass
 
 @database_sync_to_async
 def get_db_object():
@@ -39,45 +43,45 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def csv_data_storage(self):
         # Open a connection to the serial port 
 
-        db_object = await get_db_object()
-        ser = serial.Serial(db_object.serial_port, db_object.baud_rate, timeout=db_object.timeout)
-
-        import sys
-        sys.path.insert(0, '../Code/interface/interfaceProject')
+        # import sys
+        # sys.path.insert(0, '../Code/interface/interfaceProject')
         
-        csvFile = 'data-receiver.csv'
-        xlsxFile = 'data-receiver.xlsx'
+        # csvFile = 'data-receiver.csv'
+        # xlsxFile = 'data-receiver.xlsx'
+        
+        
+        csv_filename = 'data-receiver-150ms.csv'
+        csv_directory = 'C:/Users/facun/OneDrive/Documentos/Extra Projects/SDCAN-G3V/Code/interface/interfaceProject'
+        csv_path = os.path.join(csv_directory, csv_filename)
+
 
         while True:
             try:
-                # Read data from the serial port
-                if not ser.isOpen():
-                    ser.open()
 
-                data = ser.read(1000).decode('utf-8')
-
-                processed_data = dataProcessing(data)
                 
-                # Close the serial port connection
-                ser.close()
+                df = pd.read_csv(csv_path)
+                last_row = df.iloc[len(df)-1].to_dict()
 
-                df = pd.read_csv(csvFile)
-                df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
-                df.to_csv(csvFile, index=False)
-
-                df = pd.read_excel(xlsxFile)
-                df.loc[len(df)] = [processed_data.__dict__[key] for key in processed_data.__dict__]
-                df.to_excel(xlsxFile, index=False)
+                obj = processingClass(dict(last_row))
                 
-                text_data = processed_data.__dict__
-                text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude)) 
-                text_data['estacion_terrena_latitude'] = str(db_object.estacion_terrena_latitude ) 
-                text_data['estacion_terrena_longitude'] = str(db_object.estacion_terrena_longitude ) 
+                text_data = obj.__dict__
+                text_data['datetime'] = last_row['datetime']
+                # text_data['altura'] = str(processed_data.calcAltura(db_object.estacion_terrena_altitude)) 
+                # text_data['estacion_terrena_latitude'] = str(db_object.estacion_terrena_latitude ) 
+                # text_data['estacion_terrena_longitude'] = str(db_object.estacion_terrena_longitude ) 
+                
+                # print(text_data + last_row)
+                
+                for key, value in last_row.items():
+                    # if key in text_data:
+                    #     text_data[key] += value
+                    # else:
+                    text_data[key] = value
+
                 print(text_data)
-
                 await self.send(text_data=json.dumps(text_data))
 
-                await asyncio.sleep(3)
+                await asyncio.sleep(1)
 
             except Exception as e:
                 print(f'Error occurred: {e}')
