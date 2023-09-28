@@ -15,12 +15,12 @@
     <div class="sidebar-item">Pressure</div>
     <div class="sidebar-item">Altitude</div>
     <div class="sidebar-item">Liquid Petrol Gas (LPG)</div>
-    <div class="sidebar-item">Methane (CH4)</div>
+    <div class="sidebar-item">Methane (Methane)</div>
     <div class="sidebar-item">Ozone (O3)</div>
     <div class="sidebar-item">Carbon Monoxide (CO)</div>
     <div class="sidebar-item">Carbon Dioxide (CO2)</div>
-    <div class="sidebar-item">Ammonium (NH4)</div>
-    <div class="sidebar-item">Toluen (C6H5CH3)</div>
+    <div class="sidebar-item">Ammonium (Ammonia)</div>
+    <div class="sidebar-item">Toluene (C6H5CH3)</div>
     <div class="sidebar-item">Speed</div>
     <div class="sidebar-item">RSSI</div> {% endcomment %}
 {% endblock sidebar-items %}
@@ -43,12 +43,12 @@
                                 <th>Pressure</th>
                                 <th>Altitude</th>
                                 <th>LPG</th>
-                                <th>CH4</th>
+                                <th>Methane</th>
                                 <th>O3</th>
                                 <th>CO</th>
                                 <th>CO2</th>
-                                <th>NH4</th>
-                                <th>Toluen</th>
+                                <th>Ammonia</th>
+                                <th>Toluene</th>
                                 <th>SPEED</th>
                                 <th>RSSI</th>
                             </tr>
@@ -160,12 +160,12 @@
             const pressureCell = document.createElement('td');
             const altitudeCell = document.createElement('td');
             const lpgCell = document.createElement('td');
-            const ch4Cell = document.createElement('td');
+            const MethaneCell = document.createElement('td');
             const o3Cell = document.createElement('td');
             const coCell = document.createElement('td');
             const co2Cell = document.createElement('td');
-            const nh4Cell = document.createElement('td');
-            const ToluenCell = document.createElement('td');
+            const AmmoniaCell = document.createElement('td');
+            const TolueneCell = document.createElement('td');
             const speedCell = document.createElement('td');
             const rssiCell = document.createElement('td');
 
@@ -178,31 +178,30 @@
 
             // Set the cell values from the received data
             datetimeCell.textContent = formattedTime;
-            temperatureCell.textContent = data.Temperature;
-            pressureCell.textContent = data.Pressure;
-            altitudeCell.textContent = data.Altitude;
+            temperatureCell.textContent = data.temperature;
+            pressureCell.textContent = data.pressure;
+            altitudeCell.textContent = data.altitude;
             lpgCell.textContent = data.LPG;
-            ch4Cell.textContent = data.CH4;
+            MethaneCell.textContent = data.Methane;
             o3Cell.textContent = data.O3;
             coCell.textContent = data.CO;
             co2Cell.textContent = data.CO2;
-            nh4Cell.textContent = data.NH4;
-            ToluenCell.textContent = data.Toluen;
+            AmmoniaCell.textContent = data.Ammonia;
+            TolueneCell.textContent = data.Toluene;
             speedCell.textContent = data.Speed;
             rssiCell.textContent = data.RSSI;
-
             // Insert the cells into the row
             row.appendChild(datetimeCell);
             row.appendChild(temperatureCell);
             row.appendChild(pressureCell);
             row.appendChild(altitudeCell);
             row.appendChild(lpgCell);
-            row.appendChild(ch4Cell);
+            row.appendChild(MethaneCell);
             row.appendChild(o3Cell);
             row.appendChild(coCell);
             row.appendChild(co2Cell);
-            row.appendChild(nh4Cell);
-            row.appendChild(ToluenCell);
+            row.appendChild(AmmoniaCell);
+            row.appendChild(TolueneCell);
             row.appendChild(speedCell);
             row.appendChild(rssiCell);
 
@@ -267,12 +266,12 @@
                 },
                 series: [
                     { name: 'LPG', data: [data.LPG] },
-                    { name: 'CH4', data: [data.CH4] },
+                    { name: 'Methane', data: [data.Methane] },
                     { name: 'O3', data: [data.O3] },
                     { name: 'CO', data: [data.CO] },
                     { name: 'CO2', data: [data.CO2] },
-                    { name: 'NH4', data: [data.NH4] },
-                    { name: 'Toluen', data: [data.Toluen] },
+                    { name: 'Ammonia', data: [data.Ammonia] },
+                    { name: 'Toluene', data: [data.Toluene] },
                 ],
                 xaxis: {
                     categories: ['Gases'],
