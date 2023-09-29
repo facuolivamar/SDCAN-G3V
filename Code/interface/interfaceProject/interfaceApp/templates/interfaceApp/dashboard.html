@@ -127,6 +127,17 @@
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
+            // Redondear los valores numéricos a 2 decimales
+            data.temperature = parseFloat(data.temperature).toFixed(2);
+            data.pressure = parseFloat(data.pressure).toFixed(2);
+            data.altitude = parseFloat(data.altitude).toFixed(2);
+            data.LPG = parseFloat(data.LPG).toFixed(2);
+            data.Methane = parseFloat(data.Methane).toFixed(2);
+            data.O3 = parseFloat(data.O3).toFixed(2);
+            data.CO = parseFloat(data.CO).toFixed(2);
+            data.CO2 = parseFloat(data.CO2).toFixed(2);
+            data.Ammonia = parseFloat(data.Ammonia).toFixed(2);
+            data.Toluene = parseFloat(data.Toluene).toFixed(2);
 
             // Create a new row for the table
             const row = document.createElement('tr');
