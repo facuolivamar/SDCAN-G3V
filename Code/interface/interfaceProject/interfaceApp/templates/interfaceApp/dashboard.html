@@ -11,26 +11,12 @@
 {% block sidebar-title %} Real time data {% endblock sidebar-title %}
 
 {% block sidebar-items %}
-    {% comment %} <div class="sidebar-item">Temperature</div>
-    <div class="sidebar-item">Pressure</div>
-    <div class="sidebar-item">Altitude</div>
-    <div class="sidebar-item">Liquid Petrol Gas (LPG)</div>
-    <div class="sidebar-item">Methane (Methane)</div>
-    <div class="sidebar-item">Ozone (O3)</div>
-    <div class="sidebar-item">Carbon Monoxide (CO)</div>
-    <div class="sidebar-item">Carbon Dioxide (CO2)</div>
-    <div class="sidebar-item">Ammonium (Ammonia)</div>
-    <div class="sidebar-item">Toluene (C6H5CH3)</div>
-    <div class="sidebar-item">Speed</div>
-    <div class="sidebar-item">RSSI</div> {% endcomment %}
+    <!-- Add your sidebar items here -->
 {% endblock sidebar-items %}
 
 {% block section %}
-
     <section class="section">
-
         <div class="container">
-
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="section-heading">Measurements</h2>
@@ -49,8 +35,6 @@
                                 <th>CO2</th>
                                 <th>Ammonia</th>
                                 <th>Toluene</th>
-                                <th>SPEED</th>
-                                <th>RSSI</th>
                             </tr>
                             </thead>
                             <tbody id="table-body">
@@ -75,80 +59,71 @@
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="section-heading">Map Chart</h2>
-                    <div id="mapChart" style="height: 400px;"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="section-heading">Line chart</h2>
-                    <div id="chart-container">
-                        <div id="lineChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
-        <script>
-
+    <script>
         const tableBody = document.getElementById('table-body');
         const maxRows = 5;
 
         // Define empty arrays for storing data points
-        let chartSpeedData = [];
-        let chartRssiData = [];
+        let chartLPGData = [];
+        let chartMethaneData = [];
+        let chartO3Data = [];
+        let chartCOData = [];
+        let chartCO2Data = [];
+        let chartAmmoniaData = [];
+        let chartTolueneData = [];
         let chartLabel = [];
 
-        const lineChart = document.getElementById('lineChart');
+        const gasChart = document.getElementById('gasChart');
 
-        // Create the chart and store the instance in a variable
-        const chart = new ApexCharts(lineChart, {
+        const gasChartOptions = {
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: true,
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                },
+            },
             series: [
-                {name: 'Speed', data: chartSpeedData},
-                {name: 'RSSI', data: chartRssiData},
+                { name: 'LPG', data: chartLPGData },
+                { name: 'Methane', data: chartMethaneData },
+                { name: 'O3', data: chartO3Data },
+                { name: 'CO', data: chartCOData },
+                { name: 'CO2', data: chartCO2Data },
+                { name: 'Ammonia', data: chartAmmoniaData },
+                { name: 'Toluene', data: chartTolueneData },
             ],
-            chart: {type: 'line', height: 350},
-            xaxis: {categories: chartLabel},
-            yaxis: {title: {text: 'Value'}},
-            legend: {position: 'top'},
-        });
+            xaxis: {
+                categories: chartLabel,
+            },
+            legend: {
+                position: 'top',
+            },
+        };
 
-        function updateLineChart() {
+        const newGasChart = new ApexCharts(gasChart, gasChartOptions);
+        newGasChart.render();
+
+        function updateGasChart() {
             // Update the chart's datasets with the latest data arrays
-            chart.updateSeries([
-                {name: 'Speed', data: chartSpeedData},
-                {name: 'RSSI', data: chartRssiData},
+            newGasChart.updateSeries([
+                { name: 'LPG', data: chartLPGData },
+                { name: 'Methane', data: chartMethaneData },
+                { name: 'O3', data: chartO3Data },
+                { name: 'CO', data: chartCOData },
+                { name: 'CO2', data: chartCO2Data },
+                { name: 'Ammonia', data: chartAmmoniaData },
+                { name: 'Toluene', data: chartTolueneData },
             ]);
-
-            // Update the chart
-            chart.updateOptions({
-                xaxis: {categories: chartLabel},
-            });
         }
 
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/room/'
+            'ws://' + window.location.host + '/ws/chat/room/'
         );
-
-
-        {% comment %} chatSocket.onopen = function(e) {
-            // Connection is established, send initial data if needed
-            chatSocket.send(JSON.stringify({ 'message': 'Initial data' }));
-        }; {% endcomment %}
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
@@ -166,8 +141,6 @@
             const co2Cell = document.createElement('td');
             const AmmoniaCell = document.createElement('td');
             const TolueneCell = document.createElement('td');
-            const speedCell = document.createElement('td');
-            const rssiCell = document.createElement('td');
 
             var dateString = data.datetime;
             var date = new Date(dateString);
@@ -188,8 +161,7 @@
             co2Cell.textContent = data.CO2;
             AmmoniaCell.textContent = data.Ammonia;
             TolueneCell.textContent = data.Toluene;
-            speedCell.textContent = data.Speed;
-            rssiCell.textContent = data.RSSI;
+
             // Insert the cells into the row
             row.appendChild(datetimeCell);
             row.appendChild(temperatureCell);
@@ -202,8 +174,6 @@
             row.appendChild(co2Cell);
             row.appendChild(AmmoniaCell);
             row.appendChild(TolueneCell);
-            row.appendChild(speedCell);
-            row.appendChild(rssiCell);
 
             // Insert the row at the beginning of the table body
             tableBody.prepend(row);
@@ -214,87 +184,35 @@
             }
 
             // Update the chart data arrays with the new values
-            chartSpeedData.push(data.Speed);
-            chartRssiData.push(data.RSSI);
+            chartLPGData.push(data.LPG);
+            chartMethaneData.push(data.Methane);
+            chartO3Data.push(data.O3);
+            chartCOData.push(data.CO);
+            chartCO2Data.push(data.CO2);
+            chartAmmoniaData.push(data.Ammonia);
+            chartTolueneData.push(data.Toluene);
             chartLabel.push(formattedTime);
 
             // Limit the chart data arrays to a maximum number of data points (e.g., 10)
             const maxDataPoints = 5;
-            if (chartRssiData.length > maxDataPoints) {
-                chartSpeedData.shift() // Remove the oldest data point
-                chartRssiData.shift();  // Remove the oldest data point
+            if (chartLabel.length > maxDataPoints) {
+                chartLPGData.shift();
+                chartMethaneData.shift();
+                chartO3Data.shift();
+                chartCOData.shift();
+                chartCO2Data.shift();
+                chartAmmoniaData.shift();
+                chartTolueneData.shift();
                 chartLabel.shift();  // Remove the oldest data point
             }
 
             // Update the line chart with the updated data
-            updateLineChart();
-
-            // Elemento DIV donde se mostrará el mapa
-            var mapContainer = document.getElementById('mapChart');
-
-            // Crea un mapa Leaflet centrado en una ubicación específica
-            const estacion_terrena_latitude = data.estacion_terrena_latitude;
-            const estacion_terrena_longitude = data.estacion_terrena_longitude;
-            var myMap = L.map(mapContainer).setView([estacion_terrena_latitude, estacion_terrena_longitude], 15);
-
-            // Agrega un marcador a la ubicación
-            var marker1 = L.marker([estacion_terrena_latitude, estacion_terrena_longitude]).addTo(myMap);
-            marker1.bindPopup("Estacion Terrena");
-
-            const estacion_espacial_latitude = data.Latitude;
-            const estacion_espacial_longitude = data.Longitude;            
-            // Agrega un marcador a la ubicación
-            var marker2 = L.marker([estacion_espacial_latitude, estacion_espacial_longitude]).addTo(myMap);
-            marker2.bindPopup("Estacion Espacial");
-
-
-            // Agrega el mapa base de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(myMap);
-
-            const gasChartOptions = {
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                    },
-                },
-                series: [
-                    { name: 'LPG', data: [data.LPG] },
-                    { name: 'Methane', data: [data.Methane] },
-                    { name: 'O3', data: [data.O3] },
-                    { name: 'CO', data: [data.CO] },
-                    { name: 'CO2', data: [data.CO2] },
-                    { name: 'Ammonia', data: [data.Ammonia] },
-                    { name: 'Toluene', data: [data.Toluene] },
-                ],
-                xaxis: {
-                    categories: ['Gases'],
-                },
-                legend: {
-                    position: 'top',
-                },
-            };
-    
-            // Renderiza el gráfico de concentración de gases
-            const gasChart = new ApexCharts(document.querySelector('#gasChart'), gasChartOptions);
-            gasChart.render();
+            updateGasChart();
         };
 
         chatSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly');
         };
-
-        // Render the chart
-        chart.render();
-
     </script>
-
 {% endblock section %}
-
 </html>
