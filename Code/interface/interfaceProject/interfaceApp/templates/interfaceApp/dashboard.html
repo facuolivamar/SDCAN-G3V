@@ -30,7 +30,7 @@
                                 <th class="text-nowrap">Altitude</th>
                                 <th class="text-nowrap">LPG</th>
                                 <th class="text-nowrap">Methane</th>
-                                <th class="text-nowrap">O3</th>
+                                <th class="text-nowrap">O3 (ppm/100)</th>
                                 <th class="text-nowrap">CO</th>
                                 <th class="text-nowrap">CO2</th>
                                 <th class="text-nowrap">Ammonia</th>
@@ -133,7 +133,7 @@
             data.altitude = parseFloat(data.altitude).toFixed(2);
             data.LPG = parseFloat(data.LPG).toFixed(2);
             data.Methane = parseFloat(data.Methane).toFixed(2);
-            data.O3 = parseFloat(data.O3).toFixed(2);
+            data.O3 = (parseFloat(data.O3)/100).toFixed(2);
             data.CO = parseFloat(data.CO).toFixed(2);
             data.CO2 = parseFloat(data.CO2).toFixed(2);
             data.Ammonia = parseFloat(data.Ammonia).toFixed(2);
