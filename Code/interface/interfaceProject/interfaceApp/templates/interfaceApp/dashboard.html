@@ -15,11 +15,11 @@
 {% endblock sidebar-items %}
 
 {% block section %}
-    <section class="section">
+    <section class="section" style="width: 100%;">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h2 class="section-heading">Measurements</h2>
+                <div class="col">
+                    <h2 class="section-heading">Measurements (ppm)</h2>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
@@ -30,7 +30,7 @@
                                 <th class="text-nowrap">Altitude</th>
                                 <th class="text-nowrap">LPG</th>
                                 <th class="text-nowrap">Methane</th>
-                                <th class="text-nowrap">O3 (ppm/1000)</th>
+                                <th class="text-nowrap">O3 /1000</th>
                                 <th class="text-nowrap">CO</th>
                                 <th class="text-nowrap">CO2</th>
                                 <th class="text-nowrap">Ammonia</th>
@@ -46,10 +46,10 @@
         </div>
     </section>
 
-    <section class="section">
+    <section class="section" style="width: 100%;">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col">
                     <h2 class="section-heading">Gas Concentration Chart</h2>
                     <div id="chart-container">
                         <div id="gasChart"></div>

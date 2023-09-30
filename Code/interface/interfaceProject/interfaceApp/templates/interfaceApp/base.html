@@ -90,20 +90,9 @@
 
   <div class="container-fluid">
     <div class="row">
-        <!-- Left sidebar section -->
-        <div class="col-md-2">
-            <div class="sidebar">
-            <h2 class="sidebar-heading"> {% block sidebar-title %} Sidebar {% endblock sidebar-title %}</h2>
-            {% block sidebar-items %}
-                <div class="sidebar-item">Item 1</div>
-                <div class="sidebar-item">Item 2</div>
-                <div class="sidebar-item">Item 3</div>
-            {% endblock sidebar-items %}
-            </div>
-        </div>
 
       <!-- Main section -->
-      <div class="col-md-10">
+      <div class="col-md-13">
         {% block section %}
         {% endblock section %}
       </div>
