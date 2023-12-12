@@ -1,7 +1,7 @@
 # Smog Detector CAN (SDCAN)
 
 ## Introduction
-This readme provides an overview of the Salas Cuna project developed by the Equipo Villada para la Investigación Espacial (EVIE) from Instituto Técnico Salesiano Villada. The project aims to measure and monitor air pollution levels in the province of Córdoba, Argentina, using a CanSat (Satellite in a Can) device. The CanSat will collect data on pressure, temperature, ozone levels, nitrogen oxides, volatile organic compounds, carbon dioxide, and particulate matter. The project's primary mission is to transmit this data to a ground station in real-time, while the secondary mission involves studying pollution levels in different areas of the province.
+This readme provides an overview of the SDCAN project developed by the Equipo Villada para la Investigación Espacial (EVIE) from Instituto Técnico Salesiano Villada. The project aims to measure and monitor air pollution levels in the province of Córdoba, Argentina, using a CanSat (Satellite in a Can) device. The CanSat will collect data on pressure, temperature, ozone levels, nitrogen oxides, volatile organic compounds, carbon dioxide, and particulate matter. The project's primary mission is to transmit this data to a ground station in real-time, while the secondary mission involves studying pollution levels in different areas of the province.
 
 ## Mission Name: SDCAN (Smog Detector CAN)
 Patch:
